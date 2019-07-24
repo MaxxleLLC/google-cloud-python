@@ -441,7 +441,7 @@ class Database(object):
             self._local.transaction_running = False
 
     def _validate(self):
-        """ A helper check-point to specify inevitable checkout errors
+        """ A helper check-point to categorize the inevitable errors
 
         Throws an exception with the appropriate message if either, the database
         or the corresponding instance are misspelled or do not exist. This helps
