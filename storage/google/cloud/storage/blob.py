@@ -517,12 +517,15 @@ class Blob(_PropertyMixin):
         client = self._require_client(client)
         return client._http
 
-    def _get_download_url(self):
+    def _get_download_url(self, query_params=None):
         """Get the download URL for the current blob.
 
         If the ``media_link`` has been loaded, it will be used, otherwise
         the URL will be constructed from the current blob's path (and possibly
         generation) to avoid a round trip.
+
+        :type query_params: dict or ``NoneType``
+        :param query_params: (Optional) Extension (Custom) query parameters configurations.
 
         :rtype: str
         :returns: The download URL for the current blob.
@@ -537,6 +540,10 @@ class Blob(_PropertyMixin):
 
         if self.user_project is not None:
             name_value_pairs.append(("userProject", self.user_project))
+
+        if query_params is not None:
+            query_params_list = list(query_params.items())
+            name_value_pairs.extend(query_params_list)
 
         return _add_query_parameters(base_url, name_value_pairs)
 
@@ -586,7 +593,9 @@ class Blob(_PropertyMixin):
             while not download.finished:
                 download.consume_next_chunk(transport)
 
-    def download_to_file(self, file_obj, client=None, start=None, end=None):
+    def download_to_file(
+        self, file_obj, client=None, start=None, end=None, query_params=None
+    ):
         """Download the contents of this blob into a file-like object.
 
         .. note::
@@ -626,9 +635,13 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type query_params: dict or ``NoneType``
+        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+                             See: https://cloud.google.com/storage/docs/json_api/v1/parameters
+
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
-        download_url = self._get_download_url()
+        download_url = self._get_download_url(query_params)
         headers = _get_encryption_headers(self._encryption_key)
         headers["accept-encoding"] = "gzip"
 
@@ -638,7 +651,9 @@ class Blob(_PropertyMixin):
         except resumable_media.InvalidResponse as exc:
             _raise_from_invalid_response(exc)
 
-    def download_to_filename(self, filename, client=None, start=None, end=None):
+    def download_to_filename(
+        self, filename, client=None, start=None, end=None, query_params=None
+    ):
         """Download the contents of this blob into a named file.
 
         If :attr:`user_project` is set on the bucket, bills the API request
@@ -658,11 +673,20 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type query_params: dict or ``NoneType``
+        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
         try:
             with open(filename, "wb") as file_obj:
-                self.download_to_file(file_obj, client=client, start=start, end=end)
+                self.download_to_file(
+                    file_obj,
+                    client=client,
+                    start=start,
+                    end=end,
+                    query_params=query_params,
+                )
         except resumable_media.DataCorruption:
             # Delete the corrupt downloaded file.
             os.remove(filename)
@@ -673,7 +697,7 @@ class Blob(_PropertyMixin):
             mtime = time.mktime(updated.timetuple())
             os.utime(file_obj.name, (mtime, mtime))
 
-    def download_as_string(self, client=None, start=None, end=None):
+    def download_as_string(self, client=None, start=None, end=None, query_params=None):
         """Download the contents of this blob as a string.
 
         If :attr:`user_project` is set on the bucket, bills the API request
@@ -690,12 +714,21 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type query_params: dict or ``NoneType``
+        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+
         :rtype: bytes
         :returns: The data stored in this blob.
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
         string_buffer = BytesIO()
-        self.download_to_file(string_buffer, client=client, start=start, end=end)
+        self.download_to_file(
+            string_buffer,
+            client=client,
+            start=start,
+            end=end,
+            query_params=query_params,
+        )
         return string_buffer.getvalue()
 
     def _get_content_type(self, content_type, filename=None):
@@ -784,7 +817,14 @@ class Blob(_PropertyMixin):
         return headers, object_metadata, content_type
 
     def _do_multipart_upload(
-        self, client, stream, content_type, size, num_retries, predefined_acl
+        self,
+        client,
+        stream,
+        content_type,
+        size,
+        num_retries,
+        predefined_acl,
+        extra_headers,
     ):
         """Perform a multipart upload.
 
@@ -817,6 +857,10 @@ class Blob(_PropertyMixin):
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
 
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers
+                              configurations
+
         :rtype: :class:`~requests.Response`
         :returns: The "200 OK" response object returned after the multipart
                   upload request.
@@ -834,6 +878,8 @@ class Blob(_PropertyMixin):
         transport = self._get_transport(client)
         info = self._get_upload_arguments(content_type)
         headers, object_metadata, content_type = info
+        if extra_headers is not None:
+            headers.update(extra_headers)
 
         base_url = _MULTIPART_URL_TEMPLATE.format(bucket_path=self.bucket.path)
         name_value_pairs = []
@@ -963,7 +1009,14 @@ class Blob(_PropertyMixin):
         return upload, transport
 
     def _do_resumable_upload(
-        self, client, stream, content_type, size, num_retries, predefined_acl
+        self,
+        client,
+        stream,
+        content_type,
+        size,
+        num_retries,
+        predefined_acl,
+        extra_headers,
     ):
         """Perform a resumable upload.
 
@@ -998,6 +1051,10 @@ class Blob(_PropertyMixin):
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
 
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers
+                              configurations
+
         :rtype: :class:`~requests.Response`
         :returns: The "200 OK" response object returned after the final chunk
                   is uploaded.
@@ -1009,6 +1066,7 @@ class Blob(_PropertyMixin):
             size,
             num_retries,
             predefined_acl=predefined_acl,
+            extra_headers=extra_headers,
         )
 
         while not upload.finished:
@@ -1017,7 +1075,14 @@ class Blob(_PropertyMixin):
         return response
 
     def _do_upload(
-        self, client, stream, content_type, size, num_retries, predefined_acl
+        self,
+        client,
+        stream,
+        content_type,
+        size,
+        num_retries,
+        predefined_acl,
+        extra_headers,
     ):
         """Determine an upload strategy and then perform the upload.
 
@@ -1054,6 +1119,10 @@ class Blob(_PropertyMixin):
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
 
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers
+                              configurations
+
         :rtype: dict
         :returns: The parsed JSON from the "200 OK" response. This will be the
                   **only** response in the multipart case and it will be the
@@ -1061,11 +1130,23 @@ class Blob(_PropertyMixin):
         """
         if size is not None and size <= _MAX_MULTIPART_SIZE:
             response = self._do_multipart_upload(
-                client, stream, content_type, size, num_retries, predefined_acl
+                client,
+                stream,
+                content_type,
+                size,
+                num_retries,
+                predefined_acl,
+                extra_headers,
             )
         else:
             response = self._do_resumable_upload(
-                client, stream, content_type, size, num_retries, predefined_acl
+                client,
+                stream,
+                content_type,
+                size,
+                num_retries,
+                predefined_acl,
+                extra_headers,
             )
 
         return response.json()
@@ -1079,6 +1160,7 @@ class Blob(_PropertyMixin):
         num_retries=None,
         client=None,
         predefined_acl=None,
+        extra_headers=None,
     ):
         """Upload the contents of this blob from a file-like object.
 
@@ -1140,6 +1222,10 @@ class Blob(_PropertyMixin):
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
 
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
+
         :raises: :class:`~google.cloud.exceptions.GoogleCloudError`
                  if the upload response returns an error status.
 
@@ -1155,14 +1241,25 @@ class Blob(_PropertyMixin):
 
         try:
             created_json = self._do_upload(
-                client, file_obj, content_type, size, num_retries, predefined_acl
+                client,
+                file_obj,
+                content_type,
+                size,
+                num_retries,
+                predefined_acl,
+                extra_headers,
             )
             self._set_properties(created_json)
         except resumable_media.InvalidResponse as exc:
             _raise_from_invalid_response(exc)
 
     def upload_from_filename(
-        self, filename, content_type=None, client=None, predefined_acl=None
+        self,
+        filename,
+        content_type=None,
+        client=None,
+        predefined_acl=None,
+        extra_headers=None,
     ):
         """Upload this blob's contents from the content of a named file.
 
@@ -1200,6 +1297,10 @@ class Blob(_PropertyMixin):
 
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
+
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
         """
         content_type = self._get_content_type(content_type, filename=filename)
 
@@ -1211,10 +1312,16 @@ class Blob(_PropertyMixin):
                 client=client,
                 size=total_bytes,
                 predefined_acl=predefined_acl,
+                extra_headers=extra_headers,
             )
 
     def upload_from_string(
-        self, data, content_type="text/plain", client=None, predefined_acl=None
+        self,
+        data,
+        content_type="text/plain",
+        client=None,
+        predefined_acl=None,
+        extra_headers=None,
     ):
         """Upload contents of this blob from the provided string.
 
@@ -1247,6 +1354,10 @@ class Blob(_PropertyMixin):
 
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
+
+        :type extra_headers: dict or ``NoneType``
+        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
         """
         data = _to_bytes(data, encoding="utf-8")
         string_buffer = BytesIO(data)
@@ -1256,10 +1367,11 @@ class Blob(_PropertyMixin):
             content_type=content_type,
             client=client,
             predefined_acl=predefined_acl,
+            extra_headers=extra_headers,
         )
 
     def create_resumable_upload_session(
-        self, content_type=None, size=None, origin=None, client=None
+        self, content_type=None, size=None, origin=None, client=None, extra_headers={}
     ):
         """Create a resumable upload session.
 
@@ -1322,10 +1434,13 @@ class Blob(_PropertyMixin):
                   completed by making an HTTP PUT request with the
                   file's contents.
 
+        :type extra_headers: dict
+        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
+
         :raises: :class:`google.cloud.exceptions.GoogleCloudError`
                  if the session creation response returns an error status.
         """
-        extra_headers = {}
         if origin is not None:
             # This header is specifically for client-side uploads, it
             # determines the origins allowed for CORS.
