@@ -353,7 +353,9 @@ class Client(ClientWithProject):
         bucket.create(client=self, project=project)
         return bucket
 
-    def download_blob_to_file(self, blob_or_uri, file_obj, start=None, end=None):
+    def download_blob_to_file(
+        self, blob_or_uri, file_obj, start=None, end=None, query_params=None
+    ):
         """Download the contents of a blob object or blob URI into a file-like object.
 
         Args:
@@ -368,6 +370,9 @@ class Client(ClientWithProject):
                 Optional. The first byte in a range to be downloaded.
             end (int):
                 Optional. The last byte in a range to be downloaded.
+            query_params (dict):
+                (Optional) Extension (Custom) query parameters configurations.
+                See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         Examples:
             Download a blob using using a blob resource.
@@ -394,7 +399,9 @@ class Client(ClientWithProject):
 
         """
         try:
-            blob_or_uri.download_to_file(file_obj, client=self, start=start, end=end)
+            blob_or_uri.download_to_file(
+                file_obj, client=self, start=start, end=end, query_params=query_params
+            )
         except AttributeError:
             scheme, netloc, path, query, frag = urlsplit(blob_or_uri)
             if scheme != "gs":
@@ -402,7 +409,9 @@ class Client(ClientWithProject):
             bucket = Bucket(self, name=netloc)
             blob_or_uri = Blob(path[1:], bucket)
 
-            blob_or_uri.download_to_file(file_obj, client=self, start=start, end=end)
+            blob_or_uri.download_to_file(
+                file_obj, client=self, start=start, end=end, query_params=query_params
+            )
 
     def list_blobs(
         self,
