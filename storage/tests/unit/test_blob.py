@@ -348,9 +348,7 @@ class Test_Blob(unittest.TestCase):
         BLOB_NAME = "foo~bar"
         bucket = _Bucket()
         blob = self._make_one(BLOB_NAME, bucket=bucket)
-        self.assertEqual(
-            blob.public_url, "https://storage.googleapis.com/name/foo~bar"
-        )
+        self.assertEqual(blob.public_url, "https://storage.googleapis.com/name/foo~bar")
 
     def test_public_url_with_non_ascii(self):
         blob_name = u"winter \N{snowman}"
@@ -1737,21 +1735,26 @@ class Test_Blob(unittest.TestCase):
     def test__do_upload_with_retry(self):
         self._do_upload_helper(num_retries=20)
 
-    def _upload_from_file_helper(self, side_effect=None, **kwargs):
+    def _upload_from_file_helper(self, side_effect=None, response=None, **kwargs):
         from google.cloud._helpers import UTC
 
         blob = self._make_one("blob-name", bucket=None)
         # Mock low-level upload helper on blob (it is tested elsewhere).
         created_json = {"updated": "2017-01-01T09:09:09.081Z"}
-        blob._do_upload = mock.Mock(return_value=created_json, spec=[])
+        if response is None:
+            blob._do_upload = mock.Mock(return_value=created_json, spec=[])
+        else:
+            blob._do_upload = mock.Mock(return_value=created_json, spec=response)
         if side_effect is not None:
             blob._do_upload.side_effect = side_effect
         # Make sure `updated` is empty before the request.
         self.assertIsNone(blob.updated)
-
         data = b"data is here"
-        stream = io.BytesIO(data)
-        stream.seek(2)  # Not at zero.
+        if response is None:
+            stream = io.BytesIO(data)
+            stream.seek(2)  # Not at zero.
+        else:
+            stream = response
         content_type = u"font/woff"
         client = mock.sentinel.client
         predefined_acl = kwargs.get("predefined_acl", None)
@@ -1766,9 +1769,10 @@ class Test_Blob(unittest.TestCase):
 
         # Check the mock.
         num_retries = kwargs.get("num_retries")
-        blob._do_upload.assert_called_once_with(
-            client, stream, content_type, len(data), num_retries, predefined_acl
-        )
+        if not response:
+            blob._do_upload.assert_called_once_with(
+                client, stream, content_type, len(data), num_retries, predefined_acl
+            )
         return stream
 
     def test_upload_from_file_success(self):
@@ -1787,6 +1791,15 @@ class Test_Blob(unittest.TestCase):
     def test_upload_from_file_with_rewind(self):
         stream = self._upload_from_file_helper(rewind=True)
         assert stream.tell() == 0
+
+    def test_upload_from_file_with_httpresponse(self):
+        response = mock.Mock()
+        response.__class__ = http_client.HTTPResponse
+        response.read.return_value = b"test-data"
+        response.status_code = 200
+        stream = self._upload_from_file_helper(response=response)
+        self.assertEqual(stream.status_code, 200)
+        self.assertEqual(stream.read(), b"test-data")
 
     def test_upload_from_file_failure(self):
         import requests

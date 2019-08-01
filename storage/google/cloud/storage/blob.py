@@ -34,6 +34,7 @@ import os
 import time
 import warnings
 
+from six.moves import http_client
 from six.moves.urllib.parse import parse_qsl
 from six.moves.urllib.parse import quote
 from six.moves.urllib.parse import urlencode
@@ -1154,6 +1155,9 @@ class Blob(_PropertyMixin):
         predefined_acl = ACL.validate_predefined(predefined_acl)
 
         try:
+            if isinstance(file_obj, http_client.HTTPResponse):
+                data = file_obj.read()
+                file_obj = BytesIO(data)
             created_json = self._do_upload(
                 client, file_obj, content_type, size, num_retries, predefined_acl
             )
