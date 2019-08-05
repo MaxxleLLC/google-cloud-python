@@ -690,10 +690,8 @@ class Test_Blob(unittest.TestCase):
         blob._properties["mediaLink"] = media_link
         query_params = {"prettyPrint": False}
         download_url = blob._get_download_url(query_params=query_params)
-        self.assertEqual(
-            download_url,
-            "{}?prettyPrint={}".format(media_link, query_params["prettyPrint"]),
-        )
+        result = "{}?prettyPrint={}".format(media_link, query_params["prettyPrint"])
+        self.assertEqual(download_url, result)
 
     def test__get_download_url_on_the_fly(self):
         blob_name = "bzzz-fly.txt"

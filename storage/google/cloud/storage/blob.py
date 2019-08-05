@@ -525,7 +525,8 @@ class Blob(_PropertyMixin):
         generation) to avoid a round trip.
 
         :type query_params: dict or ``NoneType``
-        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+        :param query_params: (Optional) Extension (custom) query parameters.
+                             See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :rtype: str
         :returns: The download URL for the current blob.
@@ -636,7 +637,7 @@ class Blob(_PropertyMixin):
         :param end: Optional, The last byte in a range to be downloaded.
 
         :type query_params: dict or ``NoneType``
-        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+        :param query_params: (Optional) Extension (custom) query parameters.
                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :raises: :class:`google.cloud.exceptions.NotFound`
@@ -674,7 +675,8 @@ class Blob(_PropertyMixin):
         :param end: Optional, The last byte in a range to be downloaded.
 
         :type query_params: dict or ``NoneType``
-        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+        :param query_params: (Optional) Extension (custom) query parameters.
+                             See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
@@ -715,7 +717,8 @@ class Blob(_PropertyMixin):
         :param end: Optional, The last byte in a range to be downloaded.
 
         :type query_params: dict or ``NoneType``
-        :param query_params: (Optional) Extension (Custom) query parameters configurations.
+        :param query_params: (Optional) Extension (custom) query parameters.
+                             See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :rtype: bytes
         :returns: The data stored in this blob.
@@ -858,8 +861,8 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers
-                              configurations
+        :param extra_headers: (Optional) Extension (custom) query parameters.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :rtype: :class:`~requests.Response`
         :returns: The "200 OK" response object returned after the multipart
@@ -1052,8 +1055,8 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers
-                              configurations
+        :param extra_headers: (Optional) Extension (custom) query parameters.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :rtype: :class:`~requests.Response`
         :returns: The "200 OK" response object returned after the final chunk
@@ -1120,8 +1123,8 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers
-                              configurations
+        :param extra_headers: (Optional) Extension (custom) query parameters.
+                              See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :rtype: dict
         :returns: The parsed JSON from the "200 OK" response. This will be the
@@ -1223,7 +1226,7 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+        :param extra_headers: (Optional) Extension (custom) query parameters.
                               See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :raises: :class:`~google.cloud.exceptions.GoogleCloudError`
@@ -1299,7 +1302,7 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+        :param extra_headers: (Optional) Extension (custom) query parameters.
                               See: https://cloud.google.com/storage/docs/json_api/v1/parameters
         """
         content_type = self._get_content_type(content_type, filename=filename)
@@ -1356,7 +1359,7 @@ class Blob(_PropertyMixin):
         :param predefined_acl: (Optional) predefined access control list
 
         :type extra_headers: dict or ``NoneType``
-        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+        :param extra_headers: (Optional) Extension (custom) query parameters.
                               See: https://cloud.google.com/storage/docs/json_api/v1/parameters
         """
         data = _to_bytes(data, encoding="utf-8")
@@ -1435,7 +1438,7 @@ class Blob(_PropertyMixin):
                   file's contents.
 
         :type extra_headers: dict
-        :param extra_headers: (Optional) Extension (Custom) http headers configurations.
+        :param extra_headers: (Optional) Extension (custom) query parameters.
                               See: https://cloud.google.com/storage/docs/json_api/v1/parameters
 
         :raises: :class:`google.cloud.exceptions.GoogleCloudError`
