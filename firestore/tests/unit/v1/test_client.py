@@ -69,11 +69,53 @@ class TestClient(unittest.TestCase):
             credentials=credentials,
             database=database,
             client_info=client_info,
+            client_options={"api_endpoint": "endpoint"},
         )
         self.assertEqual(client.project, self.PROJECT)
         self.assertEqual(client._credentials, credentials)
         self.assertEqual(client._database, database)
         self.assertIs(client._client_info, client_info)
+        self.assertIs(client._target, "endpoint")
+
+    def test_ctor_w_empty_client_options(self):
+        from google.api_core.client_options import ClientOptions
+
+        credentials = _make_credentials()
+        database = "now-db"
+        client_info = mock.Mock()
+        client_options = ClientOptions()
+        client = self._make_one(
+            project=self.PROJECT,
+            credentials=credentials,
+            database=database,
+            client_info=client_info,
+            client_options=client_options,
+        )
+        self.assertEqual(client.project, self.PROJECT)
+        self.assertEqual(client._credentials, credentials)
+        self.assertEqual(client._database, database)
+        self.assertIs(client._client_info, client_info)
+        self.assertEqual(client._target, "firestore.googleapis.com:443")
+
+    def test_ctor_w_client_options_object(self):
+        from google.api_core.client_options import ClientOptions
+
+        credentials = _make_credentials()
+        database = "now-db"
+        client_info = mock.Mock()
+        client_options = ClientOptions("endpoint")
+        client = self._make_one(
+            project=self.PROJECT,
+            credentials=credentials,
+            database=database,
+            client_info=client_info,
+            client_options=client_options,
+        )
+        self.assertEqual(client.project, self.PROJECT)
+        self.assertEqual(client._credentials, credentials)
+        self.assertEqual(client._database, database)
+        self.assertIs(client._client_info, client_info)
+        self.assertEqual(client._target, "endpoint")
 
     @mock.patch(
         "google.cloud.firestore_v1.gapic.firestore_client.FirestoreClient",
