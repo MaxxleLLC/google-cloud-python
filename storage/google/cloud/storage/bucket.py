@@ -19,6 +19,7 @@ import copy
 import datetime
 import json
 import warnings
+import functools
 
 import six
 
@@ -27,6 +28,7 @@ from google.api_core import datetime_helpers
 from google.cloud._helpers import _datetime_to_rfc3339
 from google.cloud._helpers import _NOW
 from google.cloud._helpers import _rfc3339_to_datetime
+from google.cloud.storage._helpers import _call_api
 from google.cloud.exceptions import NotFound
 from google.api_core.iam import Policy
 from google.cloud.storage import _signing
@@ -40,7 +42,7 @@ from google.cloud.storage.acl import DefaultObjectACL
 from google.cloud.storage.blob import Blob
 from google.cloud.storage.notification import BucketNotification
 from google.cloud.storage.notification import NONE_PAYLOAD_FORMAT
-
+from google.cloud.storage.retry import DEFAULT_RETRY
 
 _LOCATION_SETTER_MESSAGE = (
     "Assignment to 'Bucket.location' is deprecated, as it is only "
@@ -566,7 +568,7 @@ class Bucket(_PropertyMixin):
             payload_format=payload_format,
         )
 
-    def exists(self, client=None):
+    def exists(self, client=None, retry=DEFAULT_RETRY):
         """Determines whether or not this bucket exists.
 
         If :attr:`user_project` is set, bills the API request to that project.
@@ -575,6 +577,9 @@ class Bucket(_PropertyMixin):
                       ``NoneType``
         :param client: Optional. The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
 
         :rtype: bool
         :returns: True if the bucket exists in Cloud Storage.
@@ -590,7 +595,9 @@ class Bucket(_PropertyMixin):
         try:
             # We intentionally pass `_target_object=None` since fields=name
             # would limit the local properties.
-            client._connection.api_request(
+            _call_api(
+                client._connection.api_request,
+                retry,
                 method="GET",
                 path=self.path,
                 query_params=query_params,
@@ -603,7 +610,7 @@ class Bucket(_PropertyMixin):
         except NotFound:
             return False
 
-    def create(self, client=None, project=None, location=None):
+    def create(self, client=None, project=None, location=None, retry=DEFAULT_RETRY):
         """Creates current bucket.
 
         If the bucket already exists, will raise
@@ -630,6 +637,9 @@ class Bucket(_PropertyMixin):
         :param location: Optional. The location of the bucket. If not passed,
                          the default location, US, will be used. See
                          https://cloud.google.com/storage/docs/bucket-locations
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
         """
         if self.user_project is not None:
             raise ValueError("Cannot create bucket with 'user_project' set.")
@@ -649,7 +659,9 @@ class Bucket(_PropertyMixin):
         if location is not None:
             properties["location"] = location
 
-        api_response = client._connection.api_request(
+        api_response = _call_api(
+            client._connection.api_request,
+            retry,
             method="POST",
             path="/b",
             query_params=query_params,
@@ -775,6 +787,7 @@ class Bucket(_PropertyMixin):
         projection="noAcl",
         fields=None,
         client=None,
+        retry=DEFAULT_RETRY,
     ):
         """Return an iterator used to find blobs in the bucket.
 
@@ -826,6 +839,9 @@ class Bucket(_PropertyMixin):
         :param client: (Optional) The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :rtype: :class:`~google.api_core.page_iterator.Iterator`
         :returns: Iterator of all :class:`~google.cloud.storage.blob.Blob`
                   in this bucket matching the arguments.
@@ -851,7 +867,9 @@ class Bucket(_PropertyMixin):
         path = self.path + "/o"
         iterator = page_iterator.HTTPIterator(
             client=client,
-            api_request=client._connection.api_request,
+            api_request=functools.partial(
+                _call_api, client._connection.api_request, retry
+            ),
             path=path,
             item_to_value=_item_to_blob,
             page_token=page_token,
@@ -863,7 +881,7 @@ class Bucket(_PropertyMixin):
         iterator.prefixes = set()
         return iterator
 
-    def list_notifications(self, client=None):
+    def list_notifications(self, client=None, retry=DEFAULT_RETRY):
         """List Pub / Sub notifications for this bucket.
 
         See:
@@ -876,6 +894,9 @@ class Bucket(_PropertyMixin):
         :param client: Optional. The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :rtype: list of :class:`.BucketNotification`
         :returns: notification instances
         """
@@ -883,14 +904,16 @@ class Bucket(_PropertyMixin):
         path = self.path + "/notificationConfigs"
         iterator = page_iterator.HTTPIterator(
             client=client,
-            api_request=client._connection.api_request,
+            api_request=functools.partial(
+                _call_api, client._connection.api_request, retry
+            ),
             path=path,
             item_to_value=_item_to_notification,
         )
         iterator.bucket = self
         return iterator
 
-    def delete(self, force=False, client=None):
+    def delete(self, force=False, client=None, retry=DEFAULT_RETRY):
         """Delete this bucket.
 
         The bucket **must** be empty in order to submit a delete request. If
@@ -916,6 +939,9 @@ class Bucket(_PropertyMixin):
                       ``NoneType``
         :param client: Optional. The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
 
         :raises: :class:`ValueError` if ``force`` is ``True`` and the bucket
                  contains more than 256 objects / blobs.
@@ -947,14 +973,16 @@ class Bucket(_PropertyMixin):
         # We intentionally pass `_target_object=None` since a DELETE
         # request has no response value (whether in a standard request or
         # in a batch request).
-        client._connection.api_request(
+        _call_api(
+            client._connection.api_request,
+            retry,
             method="DELETE",
             path=self.path,
             query_params=query_params,
             _target_object=None,
         )
 
-    def delete_blob(self, blob_name, client=None, generation=None):
+    def delete_blob(self, blob_name, client=None, generation=None, retry=DEFAULT_RETRY):
         """Deletes a blob from the current bucket.
 
         If the blob isn't found (backend 404), raises a
@@ -980,6 +1008,9 @@ class Bucket(_PropertyMixin):
         :param generation: Optional. If present, permanently deletes a specific
                            revision of this object.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :raises: :class:`google.cloud.exceptions.NotFound` (to suppress
                  the exception, call ``delete_blobs``, passing a no-op
                  ``on_error`` callback, e.g.:
@@ -995,14 +1026,16 @@ class Bucket(_PropertyMixin):
         # We intentionally pass `_target_object=None` since a DELETE
         # request has no response value (whether in a standard request or
         # in a batch request).
-        client._connection.api_request(
+        _call_api(
+            client._connection.api_request,
+            retry,
             method="DELETE",
             path=blob.path,
             query_params=blob._query_params,
             _target_object=None,
         )
 
-    def delete_blobs(self, blobs, on_error=None, client=None):
+    def delete_blobs(self, blobs, on_error=None, client=None, retry=DEFAULT_RETRY):
         """Deletes a list of blobs from the current bucket.
 
         Uses :meth:`delete_blob` to delete each individual blob.
@@ -1023,6 +1056,9 @@ class Bucket(_PropertyMixin):
         :param client: (Optional) The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :raises: :class:`~google.cloud.exceptions.NotFound` (if
                  `on_error` is not passed).
         """
@@ -1031,7 +1067,7 @@ class Bucket(_PropertyMixin):
                 blob_name = blob
                 if not isinstance(blob_name, six.string_types):
                     blob_name = blob.name
-                self.delete_blob(blob_name, client=client)
+                self.delete_blob(blob_name, client=client, retry=retry)
             except NotFound:
                 if on_error is not None:
                     on_error(blob)
@@ -1046,6 +1082,7 @@ class Bucket(_PropertyMixin):
         client=None,
         preserve_acl=True,
         source_generation=None,
+        retry=DEFAULT_RETRY,
     ):
         """Copy the given blob to the given bucket, optionally with a new name.
 
@@ -1074,6 +1111,9 @@ class Bucket(_PropertyMixin):
         :param source_generation: Optional. The generation of the blob to be
                                   copied.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :rtype: :class:`google.cloud.storage.blob.Blob`
         :returns: The new Blob.
         """
@@ -1091,7 +1131,9 @@ class Bucket(_PropertyMixin):
 
         new_blob = Blob(bucket=destination_bucket, name=new_name)
         api_path = blob.path + "/copyTo" + new_blob.path
-        copy_result = client._connection.api_request(
+        copy_result = _call_api(
+            client._connection.api_request,
+            retry,
             method="POST",
             path=api_path,
             query_params=query_params,
@@ -1104,7 +1146,7 @@ class Bucket(_PropertyMixin):
         new_blob._set_properties(copy_result)
         return new_blob
 
-    def rename_blob(self, blob, new_name, client=None):
+    def rename_blob(self, blob, new_name, client=None, retry=DEFAULT_RETRY):
         """Rename the given blob using copy and delete operations.
 
         If :attr:`user_project` is set, bills the API request to that project.
@@ -1129,12 +1171,15 @@ class Bucket(_PropertyMixin):
         :param client: Optional. The client to use.  If not passed, falls back
                        to the ``client`` stored on the current bucket.
 
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :rtype: :class:`Blob`
         :returns: The newly-renamed blob.
         """
         same_name = blob.name == new_name
 
-        new_blob = self.copy_blob(blob, self, new_name, client=client)
+        new_blob = self.copy_blob(blob, self, new_name, client=client, retry=retry)
 
         if not same_name:
             blob.delete(client=client)

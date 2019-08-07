@@ -807,7 +807,7 @@ class Test_Blob(unittest.TestCase):
         call = mock.call("GET", expected_url, data=None, headers=headers)
         self.assertEqual(transport.request.mock_calls, [call, call])
 
-    def test__do_download_simple(self):
+    def test__do_download_simple(self, num_retries=None):
         blob_name = "blob-name"
         # Create a fake client/bucket and use them in the Blob() constructor.
         client = mock.Mock(_credentials=_make_credentials(), spec=["_credentials"])
@@ -827,13 +827,18 @@ class Test_Blob(unittest.TestCase):
         file_obj = io.BytesIO()
         download_url = "http://test.invalid"
         headers = {}
-        blob._do_download(transport, file_obj, download_url, headers)
+        blob._do_download(
+            transport, file_obj, download_url, headers, num_retries=num_retries
+        )
         # Make sure the download was as expected.
         self.assertEqual(file_obj.getvalue(), b"abcdef")
 
         transport.request.assert_called_once_with(
             "GET", download_url, data=None, headers=headers, stream=True
         )
+
+    def test__test__do_download_simple_with_retry(self):
+        self.test__do_download_simple(num_retries=11)
 
     def test__do_download_simple_with_range(self):
         blob_name = "blob-name"
@@ -864,7 +869,7 @@ class Test_Blob(unittest.TestCase):
             "GET", download_url, data=None, headers=headers, stream=True
         )
 
-    def test__do_download_chunked(self):
+    def test__do_download_chunked(self, num_retries=None):
         blob_name = "blob-name"
         # Create a fake client/bucket and use them in the Blob() constructor.
         client = mock.Mock(_credentials=_make_credentials(), spec=["_credentials"])
@@ -879,7 +884,9 @@ class Test_Blob(unittest.TestCase):
         file_obj = io.BytesIO()
         download_url = "http://test.invalid"
         headers = {}
-        blob._do_download(transport, file_obj, download_url, headers)
+        blob._do_download(
+            transport, file_obj, download_url, headers, num_retries=num_retries
+        )
         # Make sure the download was as expected.
         self.assertEqual(file_obj.getvalue(), b"abcdef")
 
@@ -889,6 +896,9 @@ class Test_Blob(unittest.TestCase):
         self.assertEqual(headers, {"range": "bytes=3-5"})
         call = mock.call("GET", download_url, data=None, headers=headers)
         self.assertEqual(transport.request.mock_calls, [call, call])
+
+    def test__do_download_chunked_with_retry(self):
+        self.test__do_download_chunked(num_retries=11)
 
     def test__do_download_chunked_with_range(self):
         blob_name = "blob-name"
@@ -972,7 +982,7 @@ class Test_Blob(unittest.TestCase):
         )
         self._check_session_mocks(client, transport, expected_url)
 
-    def _download_to_file_helper(self, use_chunks=False):
+    def _download_to_file_helper(self, use_chunks=False, num_retries=None):
         blob_name = "blob-name"
         transport = self._mock_download_transport()
         # Create a fake client/bucket and use them in the Blob() constructor.
@@ -996,7 +1006,7 @@ class Test_Blob(unittest.TestCase):
             transport.request.side_effect = [single_chunk_response]
 
         file_obj = io.BytesIO()
-        blob.download_to_file(file_obj)
+        blob.download_to_file(file_obj, num_retries=num_retries)
         self.assertEqual(file_obj.getvalue(), b"abcdef")
 
         if use_chunks:
@@ -1015,6 +1025,9 @@ class Test_Blob(unittest.TestCase):
 
     def test_download_to_file_with_chunk_size(self):
         self._download_to_file_helper(use_chunks=True)
+
+    def test_download_to_file_with_retry(self):
+        self._download_to_file_helper(num_retries=11)
 
     def _download_to_filename_helper(self, updated=None):
         import os

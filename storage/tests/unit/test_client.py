@@ -619,7 +619,7 @@ class TestClient(unittest.TestCase):
 
         client.download_blob_to_file(blob, file_obj)
         blob.download_to_file.assert_called_once_with(
-            file_obj, client=client, start=None, end=None
+            file_obj, client=client, start=None, end=None, num_retries=None
         )
 
     def test_download_blob_to_file_with_uri(self):
@@ -633,7 +633,7 @@ class TestClient(unittest.TestCase):
             client.download_blob_to_file("gs://bucket_name/path/to/object", file_obj)
 
         blob.download_to_file.assert_called_once_with(
-            file_obj, client=client, start=None, end=None
+            file_obj, client=client, start=None, end=None, num_retries=None
         )
 
     def test_download_blob_to_file_with_invalid_uri(self):
@@ -821,6 +821,32 @@ class TestClient(unittest.TestCase):
         http.request.assert_called_once_with(
             method="GET", url=mock.ANY, data=mock.ANY, headers=mock.ANY
         )
+
+    def test_list_buckets_retry_none(self):
+        PROJECT = "foo-bar"
+        CREDENTIALS = _make_credentials()
+        client = self._make_one(project=PROJECT, credentials=CREDENTIALS)
+
+        MAX_RESULTS = 10
+        PAGE_TOKEN = "ABCD"
+        PREFIX = "subfolder"
+        PROJECTION = "full"
+        FIELDS = "items/id,nextPageToken"
+
+        data = {"items": []}
+        http = _make_requests_session([_make_json_response(data)])
+        client._http_internal = http
+
+        iterator = client.list_buckets(
+            max_results=MAX_RESULTS,
+            page_token=PAGE_TOKEN,
+            prefix=PREFIX,
+            projection=PROJECTION,
+            fields=FIELDS,
+            retry=None,
+        )
+        buckets = list(iterator)
+        self.assertEqual(buckets, [])
 
     def test_list_buckets_all_arguments(self):
         from six.moves.urllib.parse import parse_qs

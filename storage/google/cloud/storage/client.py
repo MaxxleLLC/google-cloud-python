@@ -14,6 +14,8 @@
 
 """Client for interacting with the Google Cloud Storage API."""
 
+import functools
+
 from six.moves.urllib.parse import urlsplit
 
 from google.auth.credentials import AnonymousCredentials
@@ -26,6 +28,8 @@ from google.cloud.storage._http import Connection
 from google.cloud.storage.batch import Batch
 from google.cloud.storage.bucket import Bucket
 from google.cloud.storage.blob import Blob
+from google.cloud.storage.retry import DEFAULT_RETRY
+from google.cloud.storage._helpers import _call_api
 
 
 _marker = object()
@@ -298,7 +302,9 @@ class Client(ClientWithProject):
         except NotFound:
             return None
 
-    def create_bucket(self, bucket_or_name, requester_pays=None, project=None):
+    def create_bucket(
+        self, bucket_or_name, requester_pays=None, project=None, retry=DEFAULT_RETRY
+    ):
         """API call: create a new bucket via a POST request.
 
         See
@@ -316,6 +322,8 @@ class Client(ClientWithProject):
             project (str):
                 Optional. the project under which the bucket is to be created.
                 If not passed, uses the project set on the client.
+            retry (google.api_core.retry.Retry):
+                Optional. How to retry the API Call.
 
         Returns:
             google.cloud.storage.bucket.Bucket
@@ -350,10 +358,12 @@ class Client(ClientWithProject):
 
         if requester_pays is not None:
             bucket.requester_pays = requester_pays
-        bucket.create(client=self, project=project)
+        bucket.create(client=self, project=project, retry=retry)
         return bucket
 
-    def download_blob_to_file(self, blob_or_uri, file_obj, start=None, end=None):
+    def download_blob_to_file(
+        self, blob_or_uri, file_obj, start=None, end=None, num_retries=None
+    ):
         """Download the contents of a blob object or blob URI into a file-like object.
 
         Args:
@@ -368,6 +378,8 @@ class Client(ClientWithProject):
                 Optional. The first byte in a range to be downloaded.
             end (int):
                 Optional. The last byte in a range to be downloaded.
+            num_retries (int):
+                Optional. Number of download retries.
 
         Examples:
             Download a blob using using a blob resource.
@@ -394,7 +406,9 @@ class Client(ClientWithProject):
 
         """
         try:
-            blob_or_uri.download_to_file(file_obj, client=self, start=start, end=end)
+            blob_or_uri.download_to_file(
+                file_obj, client=self, start=start, end=end, num_retries=num_retries
+            )
         except AttributeError:
             scheme, netloc, path, query, frag = urlsplit(blob_or_uri)
             if scheme != "gs":
@@ -402,7 +416,9 @@ class Client(ClientWithProject):
             bucket = Bucket(self, name=netloc)
             blob_or_uri = Blob(path[1:], bucket)
 
-            blob_or_uri.download_to_file(file_obj, client=self, start=start, end=end)
+            blob_or_uri.download_to_file(
+                file_obj, client=self, start=start, end=end, num_retries=num_retries
+            )
 
     def list_blobs(
         self,
@@ -414,6 +430,7 @@ class Client(ClientWithProject):
         versions=None,
         projection="noAcl",
         fields=None,
+        retry=DEFAULT_RETRY,
     ):
         """Return an iterator used to find blobs in the bucket.
 
@@ -462,6 +479,9 @@ class Client(ClientWithProject):
                 ``'items(name,contentLanguage),nextPageToken'``.
                 See: https://cloud.google.com/storage/docs/json_api/v1/parameters#fields
 
+            retry (google.api_core.retry.Retry):
+                Optional. How to retry the API Call.
+
         Returns:
             Iterator of all :class:`~google.cloud.storage.blob.Blob`
             in this bucket matching the arguments.
@@ -476,6 +496,7 @@ class Client(ClientWithProject):
             projection=projection,
             fields=fields,
             client=self,
+            retry=retry,
         )
 
     def list_buckets(
@@ -486,6 +507,7 @@ class Client(ClientWithProject):
         projection="noAcl",
         fields=None,
         project=None,
+        retry=DEFAULT_RETRY,
     ):
         """Get all buckets in the project associated to the client.
 
@@ -532,6 +554,10 @@ class Client(ClientWithProject):
         :rtype: :class:`~google.api_core.page_iterator.Iterator`
         :raises ValueError: if both ``project`` is ``None`` and the client's
                             project is also ``None``.
+
+        :type retry: :class:`google.api_core.retry.Retry`
+        :param retry: (Optional) How to retry the API Call.
+
         :returns: Iterator of all :class:`~google.cloud.storage.bucket.Bucket`
                   belonging to this project.
         """
@@ -553,7 +579,9 @@ class Client(ClientWithProject):
 
         return page_iterator.HTTPIterator(
             client=self,
-            api_request=self._connection.api_request,
+            api_request=functools.partial(
+                _call_api, self._connection.api_request, retry
+            ),
             path="/b",
             item_to_value=_item_to_bucket,
             page_token=page_token,

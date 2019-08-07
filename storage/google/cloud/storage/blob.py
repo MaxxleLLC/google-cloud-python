@@ -541,7 +541,14 @@ class Blob(_PropertyMixin):
         return _add_query_parameters(base_url, name_value_pairs)
 
     def _do_download(
-        self, transport, file_obj, download_url, headers, start=None, end=None
+        self,
+        transport,
+        file_obj,
+        download_url,
+        headers,
+        start=None,
+        end=None,
+        num_retries=None,
     ):
         """Perform a download without any error handling.
 
@@ -567,11 +574,18 @@ class Blob(_PropertyMixin):
 
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
+
+        :type num_retries: int
+        :param num_retries: Number of download retries.
         """
         if self.chunk_size is None:
             download = Download(
                 download_url, stream=file_obj, headers=headers, start=start, end=end
             )
+            if num_retries is not None:
+                download._retry_strategy = resumable_media.RetryStrategy(
+                    max_retries=num_retries
+                )
             download.consume(transport)
         else:
             download = ChunkedDownload(
@@ -582,11 +596,17 @@ class Blob(_PropertyMixin):
                 start=start if start else 0,
                 end=end,
             )
+            if num_retries is not None:
+                download._retry_strategy = resumable_media.RetryStrategy(
+                    max_retries=num_retries
+                )
 
             while not download.finished:
                 download.consume_next_chunk(transport)
 
-    def download_to_file(self, file_obj, client=None, start=None, end=None):
+    def download_to_file(
+        self, file_obj, client=None, start=None, end=None, num_retries=None
+    ):
         """Download the contents of this blob into a file-like object.
 
         .. note::
@@ -626,6 +646,9 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type num_retries: int
+        :param num_retries: Number of download retries.
+
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
         download_url = self._get_download_url()
@@ -634,11 +657,15 @@ class Blob(_PropertyMixin):
 
         transport = self._get_transport(client)
         try:
-            self._do_download(transport, file_obj, download_url, headers, start, end)
+            self._do_download(
+                transport, file_obj, download_url, headers, start, end, num_retries
+            )
         except resumable_media.InvalidResponse as exc:
             _raise_from_invalid_response(exc)
 
-    def download_to_filename(self, filename, client=None, start=None, end=None):
+    def download_to_filename(
+        self, filename, client=None, start=None, end=None, num_retries=None
+    ):
         """Download the contents of this blob into a named file.
 
         If :attr:`user_project` is set on the bucket, bills the API request
@@ -658,11 +685,20 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type num_retries: int
+        :param num_retries: Number of download retries.
+
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
         try:
             with open(filename, "wb") as file_obj:
-                self.download_to_file(file_obj, client=client, start=start, end=end)
+                self.download_to_file(
+                    file_obj,
+                    client=client,
+                    start=start,
+                    end=end,
+                    num_retries=num_retries,
+                )
         except resumable_media.DataCorruption:
             # Delete the corrupt downloaded file.
             os.remove(filename)
@@ -673,7 +709,7 @@ class Blob(_PropertyMixin):
             mtime = time.mktime(updated.timetuple())
             os.utime(file_obj.name, (mtime, mtime))
 
-    def download_as_string(self, client=None, start=None, end=None):
+    def download_as_string(self, client=None, start=None, end=None, num_retries=None):
         """Download the contents of this blob as a string.
 
         If :attr:`user_project` is set on the bucket, bills the API request
@@ -690,12 +726,17 @@ class Blob(_PropertyMixin):
         :type end: int
         :param end: Optional, The last byte in a range to be downloaded.
 
+        :type num_retries: int
+        :param num_retries: Number of download retries.
+
         :rtype: bytes
         :returns: The data stored in this blob.
         :raises: :class:`google.cloud.exceptions.NotFound`
         """
         string_buffer = BytesIO()
-        self.download_to_file(string_buffer, client=client, start=start, end=end)
+        self.download_to_file(
+            string_buffer, client=client, start=start, end=end, num_retries=num_retries
+        )
         return string_buffer.getvalue()
 
     def _get_content_type(self, content_type, filename=None):
@@ -1162,7 +1203,12 @@ class Blob(_PropertyMixin):
             _raise_from_invalid_response(exc)
 
     def upload_from_filename(
-        self, filename, content_type=None, client=None, predefined_acl=None
+        self,
+        filename,
+        content_type=None,
+        client=None,
+        predefined_acl=None,
+        num_retries=None,
     ):
         """Upload this blob's contents from the content of a named file.
 
@@ -1200,6 +1246,10 @@ class Blob(_PropertyMixin):
 
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
+
+        :type num_retries: int
+        :param num_retries: Number of upload retries. (Deprecated: This
+                            argument will be removed in a future release.)
         """
         content_type = self._get_content_type(content_type, filename=filename)
 
@@ -1210,11 +1260,17 @@ class Blob(_PropertyMixin):
                 content_type=content_type,
                 client=client,
                 size=total_bytes,
+                num_retries=num_retries,
                 predefined_acl=predefined_acl,
             )
 
     def upload_from_string(
-        self, data, content_type="text/plain", client=None, predefined_acl=None
+        self,
+        data,
+        content_type="text/plain",
+        client=None,
+        predefined_acl=None,
+        num_retries=None,
     ):
         """Upload contents of this blob from the provided string.
 
@@ -1247,6 +1303,10 @@ class Blob(_PropertyMixin):
 
         :type predefined_acl: str
         :param predefined_acl: (Optional) predefined access control list
+
+        :type num_retries: int
+        :param num_retries: Number of upload retries. (Deprecated: This
+                            argument will be removed in a future release.)
         """
         data = _to_bytes(data, encoding="utf-8")
         string_buffer = BytesIO(data)
@@ -1255,6 +1315,7 @@ class Blob(_PropertyMixin):
             size=len(data),
             content_type=content_type,
             client=client,
+            num_retries=num_retries,
             predefined_acl=predefined_acl,
         )
 
