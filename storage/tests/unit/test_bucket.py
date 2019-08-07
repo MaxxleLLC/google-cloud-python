@@ -599,10 +599,14 @@ class Test_Bucket(unittest.TestCase):
         self.assertEqual(kw["data"], DATA)
 
     def test_create_bucket_retry_error(self):
+        from google.cloud.exceptions import ServerError
+
         PROJECT = "PROJECT"
         BUCKET_NAME = "bucket-name"
         DATA = {"name": BUCKET_NAME}
-        exc = {"errors": [{"reason": "backendError"}]}
+
+        # Retryable reason,default retry: success.
+        exc = ServerError("", errors=[{"reason": "backendError"}])
         connection = _Connection(exc)
         client = _Client(connection, project=PROJECT)
         bucket = self._make_one(client=client, name=BUCKET_NAME)
@@ -621,26 +625,25 @@ class Test_Bucket(unittest.TestCase):
         self.assertEqual(kw["data"], DATA)
 
     def test_create_bucket_retry_none(self):
+        from google.cloud.exceptions import ServerError
+
         PROJECT = "PROJECT"
         BUCKET_NAME = "bucket-name"
-        DATA = {"name": BUCKET_NAME}
-        exc = {"errors": [{"reason": "backendError"}]}
+
+        # Retryable reason, but retry is disabled.
+        exc = ServerError("", errors=[{"reason": "backendError"}])
         connection = _Connection(exc)
         client = _Client(connection, project=PROJECT)
         bucket = self._make_one(client=client, name=BUCKET_NAME)
 
-        http = _make_requests_session([_make_json_response_w_error(DATA)])
+        http = _make_requests_session([_make_json_response_w_error({})])
         with mock.patch(
             "google.cloud.storage._http.Connection.api_request",
             new=mock.MagicMock(return_value=http),
         ):
             bucket.create(retry=None)
-        self.assertEqual(bucket._properties, exc)
         kw, = connection._requested
-        self.assertEqual(kw["method"], "POST")
-        self.assertEqual(kw["path"], "/b")
-        self.assertEqual(kw["query_params"], {"project": PROJECT})
-        self.assertEqual(kw["data"], DATA)
+        self.assertEqual(bucket._properties, exc)
 
     def test_create_w_explicit_location(self):
         PROJECT = "PROJECT"
