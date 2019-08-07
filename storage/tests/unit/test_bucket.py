@@ -642,7 +642,6 @@ class Test_Bucket(unittest.TestCase):
             new=mock.MagicMock(return_value=http),
         ):
             bucket.create(retry=None)
-        kw, = connection._requested
         self.assertEqual(bucket._properties, exc)
 
     def test_create_w_explicit_location(self):
