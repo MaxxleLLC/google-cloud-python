@@ -77,7 +77,7 @@ class TestClient(unittest.TestCase):
         self.assertIs(client._client_info, client_info)
         self.assertIs(client._target, "endpoint")
 
-    def test_ctor_w_empty_client_options(self):
+    def test_constructor_w_empty_client_options(self):
         from google.api_core.client_options import ClientOptions
 
         credentials = _make_credentials()
@@ -97,7 +97,7 @@ class TestClient(unittest.TestCase):
         self.assertIs(client._client_info, client_info)
         self.assertEqual(client._target, "firestore.googleapis.com:443")
 
-    def test_ctor_w_client_options_object(self):
+    def test_constructor_w_client_options_object(self):
         from google.api_core.client_options import ClientOptions
 
         credentials = _make_credentials()
