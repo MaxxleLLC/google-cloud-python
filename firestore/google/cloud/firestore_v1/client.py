@@ -158,14 +158,13 @@ class Client(ClientWithProject):
             return self._emulator_host
 
         api_endpoint = firestore_client.FirestoreClient.SERVICE_ADDRESS
-        client_options = self._client_options
-        if client_options:
-            if type(client_options) == dict:
-                client_options = google.api_core.client_options.from_dict(
-                    client_options
+        if self._client_options:
+            if type(self._client_options) == dict:
+                self._client_options = google.api_core.client_options.from_dict(
+                    self._client_options
                 )
-            if client_options.api_endpoint:
-                api_endpoint = client_options.api_endpoint
+            if self._client_options.api_endpoint:
+                api_endpoint = self._client_options.api_endpoint
 
         return api_endpoint
 
