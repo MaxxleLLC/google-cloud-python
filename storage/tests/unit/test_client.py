@@ -619,7 +619,7 @@ class TestClient(unittest.TestCase):
 
         client.download_blob_to_file(blob, file_obj)
         blob.download_to_file.assert_called_once_with(
-            file_obj, client=client, start=None, end=None
+            file_obj, client=client, start=None, end=None, query_params=None
         )
 
     def test_download_blob_to_file_with_uri(self):
@@ -633,7 +633,7 @@ class TestClient(unittest.TestCase):
             client.download_blob_to_file("gs://bucket_name/path/to/object", file_obj)
 
         blob.download_to_file.assert_called_once_with(
-            file_obj, client=client, start=None, end=None
+            file_obj, client=client, start=None, end=None, query_params=None
         )
 
     def test_download_blob_to_file_with_invalid_uri(self):
