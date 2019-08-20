@@ -108,10 +108,10 @@ Run a query using specified parameters
 See BigQuery documentation for more information on
 `parameterized queries <https://cloud.google.com/bigquery/docs/parameterized-queries>`_.
 
-Run a query using a named query parameter
+Run a query using a named query parameter with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/client_query_params_named.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_params_named]
