@@ -13,11 +13,12 @@
 # limitations under the License.
 
 
-def client_query_w_array_params(client, capsys):
+def client_query_w_array_params(client):
 
     # [START bigquery_query_params_arrays]
-    """Run a query using array query parameters"""
-    # from google.cloud import bigquery
+    from google.cloud import bigquery
+
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     query = """
@@ -44,11 +45,7 @@ def client_query_w_array_params(client, capsys):
 
     # Print the results
     for row in query_job:
-        print("{}: \t{}".format(row.name, row.count))
-
-    assert query_job.state == "DONE"
-
-    out, _ = capsys.readouterr()
-    assert "James" in out
+        if query_job.state == "DONE":
+            print("{}: \t{}".format(row.name, row.count))
 
     # [END bigquery_query_params_arrays]

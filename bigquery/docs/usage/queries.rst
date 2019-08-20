@@ -102,14 +102,26 @@ Write a specified encryption configuration to a destination table with the
    :start-after: [START bigquery_query_destination_table_cmek]
    :end-before: [END bigquery_query_destination_table_cmek]
 
-Run a query using a named query parameter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Run a query using specified parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BigQuery documentation for more information on
 `parameterized queries <https://cloud.google.com/bigquery/docs/parameterized-queries>`_.
+
+Run a query using a named query parameter
+:func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../snippets.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_params_named]
    :end-before: [END bigquery_query_params_named]
+
+Run a query using array query parameters with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_w_array_params.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_params_arrays]
+   :end-before: [END bigquery_query_params_arrays]
