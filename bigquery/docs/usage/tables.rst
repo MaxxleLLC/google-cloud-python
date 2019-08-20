@@ -113,15 +113,6 @@ Insert rows into a table's data with the
    :start-after: [START bigquery_table_insert_rows]
    :end-before: [END bigquery_table_insert_rows]
 
-Add a column to the existing table with the
-:func:`~google.cloud.bigquery.client.Client.query` method:
-
-.. literalinclude:: ../samples/client_query_add_column.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_add_column_query_append]
-   :end-before: [END bigquery_add_column_query_append]
-
 Copying a Table
 ^^^^^^^^^^^^^^^
 

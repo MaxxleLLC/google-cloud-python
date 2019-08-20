@@ -33,8 +33,17 @@ Run a query at a batch priority with the
    :start-after: [START bigquery_query_batch]
    :end-before: [END bigquery_query_batch]
 
-Write a query results
-^^^^^^^^^^^^^^^^^^^^^
+Run a query to update a table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add a column to the existing table with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_add_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_add_column_query_append]
+   :end-before: [END bigquery_add_column_query_append]
 
 See BigQuery documentation for more information on
 `writing query results <https://cloud.google.com/bigquery/docs/writing-results>`_.
