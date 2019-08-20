@@ -18,5 +18,6 @@ from .. import client_query_total_rows
 
 def test_client_query_total_rows(capsys, client):
 
+    client_query_total_rows.client_query_total_rows(client)
     out, err = capsys.readouterr()
-    assert 
+    assert "Got 100 rows." in out

@@ -13,11 +13,12 @@
 # limitations under the License.
 
 
-def client_query_total_rows(client, capsys):
+def client_query_total_rows(client):
 
     # [START bigquery_query_total_rows]
-    """Run a query and just check for how many rows."""
     # from google.cloud import bigquery
+
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     query = (
@@ -33,8 +34,5 @@ def client_query_total_rows(client, capsys):
 
     results = query_job.result()  # Wait for query to complete.
     print("Got {} rows.".format(results.total_rows))
-
-    out, _ = capsys.readouterr()
-    assert "Got 100 rows." in out
 
     # [END bigquery_query_total_rows]

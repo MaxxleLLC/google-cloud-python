@@ -42,6 +42,15 @@ Run a query with Legacy SQL explicitly set with the
    :dedent: 4
    :start-after: [START bigquery_query_legacy]
    :end-before: [END bigquery_query_legacy]
+   
+Run a query and just check for how many rows with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_total_rows.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_total_rows]
+   :end-before: [END bigquery_query_total_rows]
 
 Run a query to update a table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
