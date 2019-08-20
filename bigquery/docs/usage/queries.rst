@@ -57,6 +57,15 @@ Write a query results to a destination table with the
    :start-after: [START bigquery_query_destination_table]
    :end-before: [END bigquery_query_destination_table]
 
+Write query results in the legacy SQL syntax to a destination table with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_destination_table_legacy.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_legacy_large_results]
+   :end-before: [END bigquery_query_legacy_large_results]
+
 Write a specified encryption configuration to a destination table with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
