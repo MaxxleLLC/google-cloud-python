@@ -34,6 +34,15 @@ Run a query at a batch priority with the
    :start-after: [START bigquery_query_batch]
    :end-before: [END bigquery_query_batch]
 
+Run a query with Legacy SQL explicitly set with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_legacy_sql.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_legacy]
+   :end-before: [END bigquery_query_legacy]
+
 Run a query to update a table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

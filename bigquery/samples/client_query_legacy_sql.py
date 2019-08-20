@@ -16,8 +16,9 @@
 def client_query_legacy_sql(client):
 
     # [START bigquery_query_legacy]
-    """Run a query with Legacy SQL explicitly set"""
-    # from google.cloud import bigquery
+    from google.cloud import bigquery
+
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     query = (
@@ -37,8 +38,10 @@ def client_query_legacy_sql(client):
         job_config=job_config,
     )  # API request - starts the query
 
-    # Print the results.
-    for row in query_job:  # API request - fetches results
-        print(row)
+    if query_job:
+        print("Query results:")
+        # Print the results.
+        for row in query_job:  # API request - fetches results
+            print(row)
 
     # [END bigquery_query_legacy]
