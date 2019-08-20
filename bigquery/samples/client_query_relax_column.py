@@ -34,8 +34,7 @@ def client_query_relax_column(client, table_id):
     # Retrieves the destination table and checks the number of required fields
     original_required_fields = sum(field.mode == "REQUIRED" for field in table.schema)
     # In this example, the existing table has 2 required fields
-    if original_required_fields == 2:
-        print("{} fields in the schema are required.".format(original_required_fields))
+    print("{} fields in the schema are required.".format(original_required_fields))
 
     # Configures the query to append the results to a destination table,
     # allowing field relaxation
@@ -63,7 +62,10 @@ def client_query_relax_column(client, table_id):
     # Checks the updated number of required fields
     table = client.get_table(table_id)
     current_required_fields = sum(field.mode == "REQUIRED" for field in table.schema)
-    if current_required_fields == 0:
+    if (
+        original_required_fields - current_required_fields > 0
+        and table.schema[1].mode == "NULLABLE"
+    ):
         print(
             "{} fields in the schema are now required.".format(current_required_fields)
         )
