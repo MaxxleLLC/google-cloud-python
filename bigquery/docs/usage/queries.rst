@@ -19,7 +19,7 @@ Run a query
 
 Run a dry run query with the 
 :func:`~google.cloud.bigquery.client.Client.query` method:
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/client_query_dry_run.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_dry_run]

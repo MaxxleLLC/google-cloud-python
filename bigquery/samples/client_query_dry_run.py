@@ -16,9 +16,9 @@
 def client_query_dry_run(client):
 
     # [START bigquery_query_dry_run]
-    """Run a dry run query"""
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     job_config = bigquery.QueryJobConfig()
@@ -37,11 +37,13 @@ def client_query_dry_run(client):
     )  # API request
 
     # A dry run query completes immediately.
-    assert query_job.state == "DONE"
-    assert query_job.dry_run
-
-    print("This query will process {} bytes.".format(query_job.total_bytes_processed))
-
-    assert query_job.total_bytes_processed > 0
+    if (
+        query_job.state == "DONE"
+        and query_job.dry_run
+        and query_job.total_bytes_processed > 0
+    ):
+        print(
+            "This query will process {} bytes.".format(query_job.total_bytes_processed)
+        )
 
     # [END bigquery_query_dry_run]
