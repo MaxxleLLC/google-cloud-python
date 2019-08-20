@@ -16,7 +16,10 @@
 from .. import client_query_destination_table_cmek
 
 
-def test_client_query_destination_table_cmek(capsys, client):
+def test_client_query_destination_table_cmek(capsys, client, random_table_id):
 
+    client_query_destination_table_cmek.client_query_destination_table_cmek(
+        client, random_table_id
+    )
     out, err = capsys.readouterr()
-    assert 
+    assert "The destination table is written using the encryption configuration" in out

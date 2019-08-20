@@ -13,29 +13,23 @@
 # limitations under the License.
 
 
-def client_query_destination_table_cmek(client, to_delete):
+def client_query_destination_table_cmek(client, table_id):
 
     # [START bigquery_query_destination_table_cmek]
-    """Run a query"""
-    dataset_id = "query_destination_table_{}".format(_millis())
-    dataset_ref = client.dataset(dataset_id)
-    to_delete.append(dataset_ref)
-    dataset = bigquery.Dataset(dataset_ref)
-    dataset.location = "US"
-    client.create_dataset(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = "your-project.your_dataset.your_table_name"
 
     job_config = bigquery.QueryJobConfig()
 
-    # Set the destination table. Here, dataset_id is a string, such as:
-    # dataset_id = 'your_dataset_id'
-    table_ref = client.dataset(dataset_id).table("your_table_id")
-    job_config.destination = table_ref
+    job_config.destination = table_id
 
     # Set the encryption key to use for the destination.
-    # TODO: Replace this key with a key you have created in KMS.
+    # TODO(developer): Replace this key with a key you have created in KMS.
     kms_key_name = "projects/{}/locations/{}/keyRings/{}/cryptoKeys/{}".format(
         "cloud-samples-tests", "us-central1", "test", "test"
     )
@@ -50,10 +44,11 @@ def client_query_destination_table_cmek(client, to_delete):
         location="US",
         job_config=job_config,
     )  # API request - starts the query
+
     query_job.result()
 
-    # The destination table is written using the encryption configuration.
-    table = client.get_table(table_ref)
-    assert table.encryption_configuration.kms_key_name == kms_key_name
+    table = client.get_table(table_id)
+    if table.encryption_configuration.kms_key_name == kms_key_name:
+        print("The destination table is written using the encryption configuration")
 
     # [END bigquery_query_destination_table_cmek]
