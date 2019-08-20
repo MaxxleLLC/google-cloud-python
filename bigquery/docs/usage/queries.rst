@@ -16,7 +16,7 @@ Run a query and wait for it to finish:
 Run a dry run query
 ^^^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/client_query_dry_run.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_dry_run]
@@ -25,6 +25,15 @@ Run a dry run query
 
 Writing query results to a destination table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Run a query with Legacy SQL explicitly set with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_legacy_sql.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_legacy]
+   :end-before: [END bigquery_query_legacy]
+
 
 See BigQuery documentation for more information on
 `writing query results <https://cloud.google.com/bigquery/docs/writing-results>`_.
@@ -35,6 +44,32 @@ See BigQuery documentation for more information on
    :start-after: [START bigquery_query_destination_table]
    :end-before: [END bigquery_query_destination_table]
 
+Write a query results in the legacy SQL syntax to a destination table with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_destination_table_legacy.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_legacy_large_results]
+   :end-before: [END bigquery_query_legacy_large_results]
+
+Write a query results to a destination table, allowing fields relaxation with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_relax_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_relax_column_query_append]
+   :end-before: [END bigquery_relax_column_query_append]
+
+Write a specified encryption configuration to a destination table with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_destination_table_cmek.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_destination_table_cmek]
+   :end-before: [END bigquery_query_destination_table_cmek]
 
 Run a query using a named query parameter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
