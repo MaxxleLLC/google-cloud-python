@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-def client_query_w_positional_params(client, capsys):
+def client_query_w_positional_params(client):
 
     # [START bigquery_query_params_positional]
-    """Run a query using query parameters"""
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     query = """
@@ -45,11 +45,7 @@ def client_query_w_positional_params(client, capsys):
 
     # Print the results
     for row in query_job:
-        print("{}: \t{}".format(row.word, row.word_count))
-
-    assert query_job.state == "DONE"
-
-    out, _ = capsys.readouterr()
-    assert "the" in out
+        if query_job.state == "DONE":
+            print("{}: \t{}".format(row.word, row.word_count))
 
     # [END bigquery_query_params_positional]
