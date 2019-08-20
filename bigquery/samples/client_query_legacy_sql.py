@@ -38,8 +38,8 @@ def client_query_legacy_sql(client):
         job_config=job_config,
     )  # API request - starts the query
 
-    if query_job:
-        print("Query results:")
+    if query_job.state == "RUNNING":
+        print("The query data:")
         # Print the results.
         for row in query_job:  # API request - fetches results
             print(row)

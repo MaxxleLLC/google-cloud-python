@@ -20,4 +20,4 @@ def test_client_query_legacy_sql(capsys, client):
 
     client_query_legacy_sql.client_query_legacy_sql(client)
     out, err = capsys.readouterr()
-    # assert "Query results:" in out
+    assert "The query data:" in out
