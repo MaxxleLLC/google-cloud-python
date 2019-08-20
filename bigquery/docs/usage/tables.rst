@@ -221,15 +221,6 @@ Delete a table with the
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
 
-.. literalinclude:: ../samples/client_query_relax_column.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_relax_column_query_append]
-   :end-before: [END bigquery_relax_column_query_append]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
 .. literalinclude:: ../samples/client_query_total_rows.py
    :language: python
    :dedent: 4

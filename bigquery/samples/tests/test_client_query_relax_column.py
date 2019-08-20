@@ -16,7 +16,10 @@
 from .. import client_query_relax_column
 
 
-def test_client_query_relax_column(capsys, client):
+def test_client_query_relax_column(capsys, client, random_table_id):
 
+    client_query_relax_column.client_query_relax_column(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "2 fields in the schema are required." in out
+    assert "Query job" in out
+    assert "0 fields in the schema are now required." in out
