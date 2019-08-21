@@ -16,7 +16,8 @@
 from .. import create_client_default_credentials
 
 
-def test_create_client_default_credentials(capsys, client):
+def test_create_client_default_credentials(capsys):
 
+    create_client_default_credentials.create_client_default_credentials()
     out, err = capsys.readouterr()
-    assert 
+    assert "The client creation finished" in out

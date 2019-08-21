@@ -24,6 +24,7 @@ def create_client_default_credentials():
     # client library will look for credentials in the environment.
     client = bigquery.Client()
 
-    assert client is not None
+    if client is not None:
+        print("The client creation finished")
 
     # [END bigquery_client_default_credentials]
