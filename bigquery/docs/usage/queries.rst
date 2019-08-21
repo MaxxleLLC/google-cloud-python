@@ -134,3 +134,12 @@ Run a query using positional query parameters with the
    :dedent: 4
    :start-after: [START bigquery_query_params_positional]
    :end-before: [END bigquery_query_params_positional]
+
+Run a query using struct query parameters with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_w_struct_params.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_params_structs]
+   :end-before: [END bigquery_query_params_structs]

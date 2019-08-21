@@ -13,11 +13,12 @@
 # limitations under the License.
 
 
-def client_query_w_struct_params(client, capsys):
+def client_query_w_struct_params(client):
 
     # [START bigquery_query_params_structs]
-    """Run a query using struct query parameters"""
-    # from google.cloud import bigquery
+    from google.cloud import bigquery
+
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     query = "SELECT @struct_value AS s;"
@@ -39,12 +40,7 @@ def client_query_w_struct_params(client, capsys):
 
     # Print the results
     for row in query_job:
-        print(row.s)
-
-    assert query_job.state == "DONE"
-
-    out, _ = capsys.readouterr()
-    assert "1" in out
-    assert "foo" in out
+        if query_job.state == "DONE":
+            print(row.s)
 
     # [END bigquery_query_params_structs]
