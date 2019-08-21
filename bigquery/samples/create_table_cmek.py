@@ -13,20 +13,18 @@
 # limitations under the License.
 
 
-def create_table_cmek(client, to_delete):
+def create_table_cmek(client, table_id):
 
     # [START bigquery_create_table_cmek]
-    dataset_id = "create_table_cmek_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
 
-    table_ref = client.dataset(dataset_id).table("my_table")
-    table = bigquery.Table(table_ref)
+    # TODO(developer): Set table_id to the ID of the table to create
+    # table_id = "your-project.your_dataset.your_table_name"
+
+    table = bigquery.Table(table_id)
 
     # Set the encryption key to use for the table.
     # TODO: Replace this key with a key you have created in Cloud KMS.
@@ -37,8 +35,11 @@ def create_table_cmek(client, to_delete):
         kms_key_name=kms_key_name
     )
 
-    table = client.create_table(table)  # API request
+    table = client.create_table(table)
 
-    assert table.encryption_configuration.kms_key_name == kms_key_name
+    table = client.get_table(table_id)
+
+    if table.encryption_configuration.kms_key_name == kms_key_name:
+        print("Created table {}".format(table_id))
 
     # [END bigquery_create_table_cmek]

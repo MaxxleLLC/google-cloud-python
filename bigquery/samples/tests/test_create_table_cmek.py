@@ -16,7 +16,8 @@
 from .. import create_table_cmek
 
 
-def test_create_table_cmek(capsys, client):
+def test_create_table_cmek(capsys, client, random_table_id):
 
+    create_table_cmek.create_table_cmek(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Created table {}".format(random_table_id) in out
