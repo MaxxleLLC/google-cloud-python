@@ -117,7 +117,7 @@ Run a query using a named query parameter with the
    :start-after: [START bigquery_query_params_named]
    :end-before: [END bigquery_query_params_named]
 
-Run a query using array query parameters with the
+Run a query using array query parameter with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../samples/client_query_w_array_params.py
@@ -126,7 +126,7 @@ Run a query using array query parameters with the
    :start-after: [START bigquery_query_params_arrays]
    :end-before: [END bigquery_query_params_arrays]
 
-Run a query using positional query parameters with the
+Run a query using positional query parameter with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../samples/client_query_w_positional_params.py
@@ -135,7 +135,7 @@ Run a query using positional query parameters with the
    :start-after: [START bigquery_query_params_positional]
    :end-before: [END bigquery_query_params_positional]
 
-Run a query using struct query parameters with the
+Run a query using struct query parameter with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../samples/client_query_w_struct_params.py
@@ -143,3 +143,12 @@ Run a query using struct query parameters with the
    :dedent: 4
    :start-after: [START bigquery_query_params_structs]
    :end-before: [END bigquery_query_params_structs]
+
+Run a query using timestamp query parameter with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/client_query_w_timestamp_params.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_params_timestamps]
+   :end-before: [END bigquery_query_params_timestamps]

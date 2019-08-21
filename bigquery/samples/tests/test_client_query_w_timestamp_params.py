@@ -18,5 +18,6 @@ from .. import client_query_w_timestamp_params
 
 def test_client_query_w_timestamp_params(capsys, client):
 
+    client_query_w_timestamp_params.client_query_w_timestamp_params(client)
     out, err = capsys.readouterr()
-    assert 
+    assert "2016, 12, 7, 9, 0" in out
