@@ -93,17 +93,8 @@ Write a query results to a destination table, allowing fields relaxation with th
    :start-after: [START bigquery_relax_column_query_append]
    :end-before: [END bigquery_relax_column_query_append]
 
-Write a specified encryption configuration to a destination table with the
-:func:`~google.cloud.bigquery.client.Client.query` method:
-
-.. literalinclude:: ../samples/client_query_destination_table_cmek.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_destination_table_cmek]
-   :end-before: [END bigquery_query_destination_table_cmek]
-
-Run a query using specified parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Run a query using a named query parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BigQuery documentation for more information on
 `parameterized queries <https://cloud.google.com/bigquery/docs/parameterized-queries>`_.
