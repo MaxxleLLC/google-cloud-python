@@ -16,7 +16,10 @@
 from .. import create_table_nested_repeated_schema
 
 
-def test_create_table_nested_repeated_schema(capsys, client):
+def test_create_table_nested_repeated_schema(capsys, client, random_table_id):
 
+    create_table_nested_repeated_schema.create_table_nested_repeated_schema(
+        client, random_table_id
+    )
     out, err = capsys.readouterr()
-    assert 
+    assert "Created table {}".format(random_table_id) in out

@@ -13,18 +13,16 @@
 # limitations under the License.
 
 
-def create_table_nested_repeated_schema(client, to_delete):
+def create_table_nested_repeated_schema(client, table_id):
 
     # [START bigquery_nested_repeated_schema]
-    dataset_id = "create_table_nested_repeated_{}".format(_millis())
-    dataset_ref = client.dataset(dataset_id)
-    dataset = bigquery.Dataset(dataset_ref)
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # dataset_ref = client.dataset('my_dataset')
+
+    # TODO(developer): Set table_id to the ID of the table to create
+    # table_id = "your-project.your_dataset.your_table_name"
 
     schema = [
         bigquery.SchemaField("id", "STRING", mode="NULLABLE"),
@@ -45,10 +43,11 @@ def create_table_nested_repeated_schema(client, to_delete):
             ],
         ),
     ]
-    table_ref = dataset_ref.table("my_table")
-    table = bigquery.Table(table_ref, schema=schema)
-    table = client.create_table(table)  # API request
+    table = bigquery.Table(table_id, schema=schema)
+    table = client.create_table(table)
 
-    print("Created table {}".format(table.full_table_id))
+    table = client.get_table(table_id)
+    if table.schema == schema:
+        print("Created table {}".format(table_id))
 
     # [END bigquery_nested_repeated_schema]
