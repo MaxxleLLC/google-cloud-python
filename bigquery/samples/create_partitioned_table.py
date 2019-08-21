@@ -13,41 +13,39 @@
 # limitations under the License.
 
 
-def create_partitioned_table(client, to_delete):
+def create_partitioned_table(client, table_id):
 
     # [START bigquery_create_table_partitioned]
-    dataset_id = "create_table_partitioned_{}".format(_millis())
-    dataset_ref = bigquery.Dataset(client.dataset(dataset_id))
-    dataset = client.create_dataset(dataset_ref)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # dataset_ref = client.dataset('my_dataset')
 
-    table_ref = dataset_ref.table("my_partitioned_table")
+    # TODO(developer): Set table_id to the ID of the table to create
+    # table_id = "your-project.your_dataset.your_table_name"
+
     schema = [
         bigquery.SchemaField("name", "STRING"),
         bigquery.SchemaField("post_abbr", "STRING"),
         bigquery.SchemaField("date", "DATE"),
     ]
-    table = bigquery.Table(table_ref, schema=schema)
+
+    table = bigquery.Table(table_id, schema=schema)
     table.time_partitioning = bigquery.TimePartitioning(
         type_=bigquery.TimePartitioningType.DAY,
         field="date",  # name of column to use for partitioning
         expiration_ms=7776000000,
     )  # 90 days
 
-    table = client.create_table(table)
-
-    print(
-        "Created table {}, partitioned on column {}".format(
-            table.table_id, table.time_partitioning.field
+    if (
+        table.time_partitioning.type_ == "DAY"
+        and table.time_partitioning.field == "date"
+        and table.time_partitioning.expiration_ms == 7776000000
+    ):
+        print(
+            "Created table {}, partitioned on column {}".format(
+                table_id, table.time_partitioning.field
+            )
         )
-    )
-
-    assert table.time_partitioning.type_ == "DAY"
-    assert table.time_partitioning.field == "date"
-    assert table.time_partitioning.expiration_ms == 7776000000
 
     # [END bigquery_create_table_partitioned]

@@ -16,7 +16,8 @@
 from .. import create_partitioned_table
 
 
-def test_create_partitioned_table(capsys, client):
+def test_create_partitioned_table(capsys, client, random_table_id):
 
+    create_partitioned_table.create_partitioned_table(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Created table {},".format(random_table_id) in out
