@@ -75,7 +75,7 @@ Write a query results to a destination table with the
    :start-after: [START bigquery_query_destination_table]
    :end-before: [END bigquery_query_destination_table]
 
-Write a query results in the legacy SQL syntax to a destination table with the
+Write a query results to a table, using the legacy SQL syntax with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../samples/client_query_destination_table_legacy.py
@@ -84,7 +84,7 @@ Write a query results in the legacy SQL syntax to a destination table with the
    :start-after: [START bigquery_query_legacy_large_results]
    :end-before: [END bigquery_query_legacy_large_results]
 
-Write a query results to a destination table, allowing fields relaxation with the
+Write a query results to a table, allowing fields relaxation with the
 :func:`~google.cloud.bigquery.client.Client.query` method:
 
 .. literalinclude:: ../samples/client_query_relax_column.py
