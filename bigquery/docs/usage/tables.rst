@@ -125,15 +125,6 @@ Copy a table with the
    :start-after: [START bigquery_copy_table]
    :end-before: [END bigquery_copy_table]
 
-Copy a table with CMEK with the
-:func:`~google.cloud.bigquery.client.Client.copy_table` method:
-
-.. literalinclude:: ../samples/copy_table_cmek.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_copy_table_cmek]
-   :end-before: [END bigquery_copy_table_cmek]
-
 Copy multiple tables with the
 :func:`~google.cloud.bigquery.client.Client.copy_table` method:
 
