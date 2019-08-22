@@ -267,7 +267,9 @@ class CloudTasksClient(object):
             ...         pass
 
         Args:
-            parent (str): Required. The location name. For example:
+            parent (str): Required.
+
+                The location name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID``
             filter_ (str): ``filter`` can be used to specify a subset of queues. Any ``Queue``
                 field can be used as a filter and several operators as supported. For
@@ -368,7 +370,9 @@ class CloudTasksClient(object):
             >>> response = client.get_queue(name)
 
         Args:
-            name (str): Required. The resource name of the queue. For example:
+            name (str): Required.
+
+                The resource name of the queue. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -452,12 +456,16 @@ class CloudTasksClient(object):
             >>> response = client.create_queue(parent, queue)
 
         Args:
-            parent (str): Required. The location name in which the queue will be created. For
-                example: ``projects/PROJECT_ID/locations/LOCATION_ID``
+            parent (str): Required.
+
+                The location name in which the queue will be created. For example:
+                ``projects/PROJECT_ID/locations/LOCATION_ID``
 
                 The list of allowed locations can be obtained by calling Cloud Tasks'
                 implementation of ``ListLocations``.
-            queue (Union[dict, ~google.cloud.tasks_v2.types.Queue]): Required. The queue to create.
+            queue (Union[dict, ~google.cloud.tasks_v2.types.Queue]): Required.
+
+                The queue to create.
 
                 ``Queue's name`` cannot be the same as an existing queue.
 
@@ -546,7 +554,9 @@ class CloudTasksClient(object):
             >>> response = client.update_queue(queue)
 
         Args:
-            queue (Union[dict, ~google.cloud.tasks_v2.types.Queue]): Required. The queue to create or update.
+            queue (Union[dict, ~google.cloud.tasks_v2.types.Queue]): Required.
+
+                The queue to create or update.
 
                 The queue's ``name`` must be specified.
 
@@ -643,7 +653,9 @@ class CloudTasksClient(object):
             >>> client.delete_queue(name)
 
         Args:
-            name (str): Required. The queue name. For example:
+            name (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -715,7 +727,9 @@ class CloudTasksClient(object):
             >>> response = client.purge_queue(name)
 
         Args:
-            name (str): Required. The queue name. For example:
+            name (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -789,7 +803,9 @@ class CloudTasksClient(object):
             >>> response = client.pause_queue(name)
 
         Args:
-            name (str): Required. The queue name. For example:
+            name (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -868,7 +884,9 @@ class CloudTasksClient(object):
             >>> response = client.resume_queue(name)
 
         Args:
-            name (str): Required. The queue name. For example:
+            name (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -1221,7 +1239,9 @@ class CloudTasksClient(object):
             ...         pass
 
         Args:
-            parent (str): Required. The queue name. For example:
+            parent (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID``
             response_view (~google.cloud.tasks_v2.types.View): The response\_view specifies which subset of the ``Task`` will be
                 returned.
@@ -1324,7 +1344,9 @@ class CloudTasksClient(object):
             >>> response = client.get_task(name)
 
         Args:
-            name (str): Required. The task name. For example:
+            name (str): Required.
+
+                The task name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID``
             response_view (~google.cloud.tasks_v2.types.View): The response\_view specifies which subset of the ``Task`` will be
                 returned.
@@ -1414,11 +1436,15 @@ class CloudTasksClient(object):
             >>> response = client.create_task(parent, task)
 
         Args:
-            parent (str): Required. The queue name. For example:
+            parent (str): Required.
+
+                The queue name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID``
 
                 The queue must already exist.
-            task (Union[dict, ~google.cloud.tasks_v2.types.Task]): Required. The task to add.
+            task (Union[dict, ~google.cloud.tasks_v2.types.Task]): Required.
+
+                The task to add.
 
                 Task names have the following format:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID``.
@@ -1536,7 +1562,9 @@ class CloudTasksClient(object):
             >>> client.delete_task(name)
 
         Args:
-            name (str): Required. The task name. For example:
+            name (str): Required.
+
+                The task name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID``
             retry (Optional[google.api_core.retry.Retry]):  A retry object used
                 to retry requests. If ``None`` is specified, requests will
@@ -1624,7 +1652,9 @@ class CloudTasksClient(object):
             >>> response = client.run_task(name)
 
         Args:
-            name (str): Required. The task name. For example:
+            name (str): Required.
+
+                The task name. For example:
                 ``projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID``
             response_view (~google.cloud.tasks_v2.types.View): The response\_view specifies which subset of the ``Task`` will be
                 returned.

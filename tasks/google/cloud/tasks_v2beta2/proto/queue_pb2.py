@@ -15,13 +15,12 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.api import resource_pb2 as google_dot_api_dot_resource__pb2
+from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.cloud.tasks_v2beta2.proto import (
     target_pb2 as google_dot_cloud_dot_tasks__v2beta2_dot_proto_dot_target__pb2,
 )
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
-from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -32,14 +31,13 @@ DESCRIPTOR = _descriptor.FileDescriptor(
         "\n\036com.google.cloud.tasks.v2beta2B\nQueueProtoP\001Z?google.golang.org/genproto/googleapis/cloud/tasks/v2beta2;tasks"
     ),
     serialized_pb=_b(
-        '\n,google/cloud/tasks_v2beta2/proto/queue.proto\x12\x1agoogle.cloud.tasks.v2beta2\x1a\x19google/api/resource.proto\x1a-google/cloud/tasks_v2beta2/proto/target.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto"\xbf\x04\n\x05Queue\x12\x0c\n\x04name\x18\x01 \x01(\t\x12Q\n\x16\x61pp_engine_http_target\x18\x03 \x01(\x0b\x32/.google.cloud.tasks.v2beta2.AppEngineHttpTargetH\x00\x12=\n\x0bpull_target\x18\x04 \x01(\x0b\x32&.google.cloud.tasks.v2beta2.PullTargetH\x00\x12;\n\x0brate_limits\x18\x05 \x01(\x0b\x32&.google.cloud.tasks.v2beta2.RateLimits\x12=\n\x0cretry_config\x18\x06 \x01(\x0b\x32\'.google.cloud.tasks.v2beta2.RetryConfig\x12\x36\n\x05state\x18\x07 \x01(\x0e\x32\'.google.cloud.tasks.v2beta2.Queue.State\x12.\n\npurge_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp"E\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x0b\n\x07RUNNING\x10\x01\x12\n\n\x06PAUSED\x10\x02\x12\x0c\n\x08\x44ISABLED\x10\x03:\\\xea\x41Y\n\x1f\x63loudtasks.googleapis.com/Queue\x12\x36projects/{project}/locations/{location}/queues/{queue}B\r\n\x0btarget_type"k\n\nRateLimits\x12\'\n\x1fmax_tasks_dispatched_per_second\x18\x01 \x01(\x01\x12\x16\n\x0emax_burst_size\x18\x02 \x01(\x05\x12\x1c\n\x14max_concurrent_tasks\x18\x03 \x01(\x05"\x81\x02\n\x0bRetryConfig\x12\x16\n\x0cmax_attempts\x18\x01 \x01(\x05H\x00\x12\x1c\n\x12unlimited_attempts\x18\x02 \x01(\x08H\x00\x12\x35\n\x12max_retry_duration\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x12.\n\x0bmin_backoff\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12.\n\x0bmax_backoff\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\rmax_doublings\x18\x06 \x01(\x05\x42\x0e\n\x0cnum_attemptsBo\n\x1e\x63om.google.cloud.tasks.v2beta2B\nQueueProtoP\x01Z?google.golang.org/genproto/googleapis/cloud/tasks/v2beta2;tasksb\x06proto3'
+        '\n,google/cloud/tasks_v2beta2/proto/queue.proto\x12\x1agoogle.cloud.tasks.v2beta2\x1a\x1cgoogle/api/annotations.proto\x1a-google/cloud/tasks_v2beta2/proto/target.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto"\xe1\x03\n\x05Queue\x12\x0c\n\x04name\x18\x01 \x01(\t\x12Q\n\x16\x61pp_engine_http_target\x18\x03 \x01(\x0b\x32/.google.cloud.tasks.v2beta2.AppEngineHttpTargetH\x00\x12=\n\x0bpull_target\x18\x04 \x01(\x0b\x32&.google.cloud.tasks.v2beta2.PullTargetH\x00\x12;\n\x0brate_limits\x18\x05 \x01(\x0b\x32&.google.cloud.tasks.v2beta2.RateLimits\x12=\n\x0cretry_config\x18\x06 \x01(\x0b\x32\'.google.cloud.tasks.v2beta2.RetryConfig\x12\x36\n\x05state\x18\x07 \x01(\x0e\x32\'.google.cloud.tasks.v2beta2.Queue.State\x12.\n\npurge_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp"E\n\x05State\x12\x15\n\x11STATE_UNSPECIFIED\x10\x00\x12\x0b\n\x07RUNNING\x10\x01\x12\n\n\x06PAUSED\x10\x02\x12\x0c\n\x08\x44ISABLED\x10\x03\x42\r\n\x0btarget_type"k\n\nRateLimits\x12\'\n\x1fmax_tasks_dispatched_per_second\x18\x01 \x01(\x01\x12\x16\n\x0emax_burst_size\x18\x02 \x01(\x05\x12\x1c\n\x14max_concurrent_tasks\x18\x03 \x01(\x05"\x81\x02\n\x0bRetryConfig\x12\x16\n\x0cmax_attempts\x18\x01 \x01(\x05H\x00\x12\x1c\n\x12unlimited_attempts\x18\x02 \x01(\x08H\x00\x12\x35\n\x12max_retry_duration\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x12.\n\x0bmin_backoff\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12.\n\x0bmax_backoff\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\rmax_doublings\x18\x06 \x01(\x05\x42\x0e\n\x0cnum_attemptsBo\n\x1e\x63om.google.cloud.tasks.v2beta2B\nQueueProtoP\x01Z?google.golang.org/genproto/googleapis/cloud/tasks/v2beta2;tasksb\x06proto3'
     ),
     dependencies=[
-        google_dot_api_dot_resource__pb2.DESCRIPTOR,
+        google_dot_api_dot_annotations__pb2.DESCRIPTOR,
         google_dot_cloud_dot_tasks__v2beta2_dot_proto_dot_target__pb2.DESCRIPTOR,
         google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,
         google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,
-        google_dot_api_dot_annotations__pb2.DESCRIPTOR,
     ],
 )
 
@@ -69,8 +67,8 @@ _QUEUE_STATE = _descriptor.EnumDescriptor(
     ],
     containing_type=None,
     serialized_options=None,
-    serialized_start=643,
-    serialized_end=712,
+    serialized_start=616,
+    serialized_end=685,
 )
 _sym_db.RegisterEnumDescriptor(_QUEUE_STATE)
 
@@ -212,9 +210,7 @@ _QUEUE = _descriptor.Descriptor(
     extensions=[],
     nested_types=[],
     enum_types=[_QUEUE_STATE],
-    serialized_options=_b(
-        "\352AY\n\037cloudtasks.googleapis.com/Queue\0226projects/{project}/locations/{location}/queues/{queue}"
-    ),
+    serialized_options=None,
     is_extendable=False,
     syntax="proto3",
     extension_ranges=[],
@@ -227,8 +223,8 @@ _QUEUE = _descriptor.Descriptor(
             fields=[],
         )
     ],
-    serialized_start=246,
-    serialized_end=821,
+    serialized_start=219,
+    serialized_end=700,
 )
 
 
@@ -302,8 +298,8 @@ _RATELIMITS = _descriptor.Descriptor(
     syntax="proto3",
     extension_ranges=[],
     oneofs=[],
-    serialized_start=823,
-    serialized_end=930,
+    serialized_start=702,
+    serialized_end=809,
 )
 
 
@@ -439,8 +435,8 @@ _RETRYCONFIG = _descriptor.Descriptor(
             fields=[],
         )
     ],
-    serialized_start=933,
-    serialized_end=1190,
+    serialized_start=812,
+    serialized_end=1069,
 )
 
 _QUEUE.fields_by_name[
@@ -778,5 +774,4 @@ _sym_db.RegisterMessage(RetryConfig)
 
 
 DESCRIPTOR._options = None
-_QUEUE._options = None
 # @@protoc_insertion_point(module_scope)
