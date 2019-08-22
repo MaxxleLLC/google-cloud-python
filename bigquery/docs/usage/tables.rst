@@ -49,6 +49,24 @@ Create an empty table with the
    :start-after: [START bigquery_create_table]
    :end-before: [END bigquery_create_table]
 
+Create a partitioned table with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../samples/create_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_create_table_partitioned]
+   :end-before: [END bigquery_create_table_partitioned]
+
+Create a table with the nested repeated schema with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../samples/create_table_nested_repeated_schema.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_nested_repeated_schema]
+   :end-before: [END bigquery_nested_repeated_schema]
+
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
 

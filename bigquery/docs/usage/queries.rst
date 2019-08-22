@@ -47,3 +47,15 @@ See BigQuery documentation for more information on
    :dedent: 4
    :start-after: [START bigquery_query_params_named]
    :end-before: [END bigquery_query_params_named]
+
+Run a query to create a view
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Create a view via a DDL query with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/ddl_create_view.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_ddl_create_view]
+   :end-before: [END bigquery_ddl_create_view]
