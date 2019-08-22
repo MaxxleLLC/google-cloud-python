@@ -13,40 +13,45 @@
 # limitations under the License.
 
 
-def extract_table(client, to_delete):
+def extract_table(client, bucket, table_id):
 
     # [START bigquery_extract_table]
-    bucket_name = "extract_shakespeare_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
+    from test_utils.retry import RetryErrors
+    from google.api_core.exceptions import InternalServerError
+    from google.api_core.exceptions import ServiceUnavailable
+    from google.api_core.exceptions import TooManyRequests
+
+    retry_storage_errors = RetryErrors(
+        (TooManyRequests, InternalServerError, ServiceUnavailable)
+    )
 
     # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
-    project = "bigquery-public-data"
-    dataset_id = "samples"
-    table_id = "shakespeare"
 
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.csv")
-    dataset_ref = client.dataset(dataset_id, project=project)
-    table_ref = dataset_ref.table(table_id)
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
+
+    # TODO(developer): Set bucket to the Cloud Storage Bucket where to extract the table.
+    # from google.cloud import storage
+    # storage_client = storage.Client()
+    # bucket_name = "your_bucket_name"
+    # bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
+
+    # TODO(developer): Set table_id to the ID of the table to extract.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    destination_uri = "gs://{}/{}".format(bucket.name, "shakespeare.csv")
+    table = client.get_table(table_id)
 
     extract_job = client.extract_table(
-        table_ref,
+        table,
         destination_uri,
         # Location must match that of the source table.
         location="US",
-    )  # API request
+    )
     extract_job.result()  # Waits for job to complete.
 
-    print(
-        "Exported {}:{}.{} to {}".format(project, dataset_id, table_id, destination_uri)
-    )
-
     blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
+    if blob.exists and blob.size > 0:
+        print("Exported {} to {}".format(table_id, destination_uri))
 
     # [END bigquery_extract_table]

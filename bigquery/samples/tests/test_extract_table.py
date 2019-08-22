@@ -16,15 +16,10 @@
 from .. import extract_table
 
 
-def test_extract_table(capsys, client):
+def test_extract_table(capsys, client, bucket):
 
-    from test_utils.retry import RetryErrors
-    from google.api_core.exceptions import InternalServerError
-    from google.api_core.exceptions import ServiceUnavailable
-    from google.api_core.exceptions import TooManyRequests
-    retry_storage_errors = RetryErrors(
-        (TooManyRequests, InternalServerError, ServiceUnavailable)
-    )
-
+    table_id = "bigquery-public-data.samples.shakespeare"
+    extract_table.extract_table(client, bucket, table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Exported {} to ".format(table_id) in out
+    assert "gs://{}/shakespeare.csv".format(bucket.name) in out
