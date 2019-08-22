@@ -16,7 +16,8 @@
 from .. import ddl_create_view
 
 
-def test_ddl_create_view(capsys, client):
+def test_ddl_create_view(capsys, client, random_table_id):
 
+    ddl_create_view.ddl_create_view(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert 'Created new view "{}".'.format(random_table_id) in out

@@ -240,15 +240,6 @@ Delete a table with the
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
 
-.. literalinclude:: ../samples/ddl_create_view.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_ddl_create_view]
-   :end-before: [END bigquery_ddl_create_view]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
 .. literalinclude:: ../samples/extract_table_compressed.py
    :language: python
    :dedent: 4

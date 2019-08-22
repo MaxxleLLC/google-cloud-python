@@ -13,25 +13,24 @@
 # limitations under the License.
 
 
-def ddl_create_view(client, to_delete, capsys):
+def ddl_create_view(client, table_id):
 
     # [START bigquery_ddl_create_view]
-    """Create a view via a DDL query."""
-    project = client.project
-    dataset_id = "ddl_view_{}".format(_millis())
-    table_id = "new_view"
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
     # from google.cloud import bigquery
-    # project = 'my-project'
-    # dataset_id = 'my_dataset'
-    # table_id = 'new_view'
-    # client = bigquery.Client(project=project)
+
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the table to create
+    # table_id = "your-project.your_dataset.your_table_name"
+
+    try:
+        import pandas
+    except (ImportError, AttributeError):
+        pandas = None
 
     sql = """
-    CREATE VIEW `{}.{}.{}`
+    CREATE VIEW `{}`
     OPTIONS(
         expiration_timestamp=TIMESTAMP_ADD(
             CURRENT_TIMESTAMP(), INTERVAL 48 HOUR),
@@ -43,30 +42,20 @@ def ddl_create_view(client, to_delete, capsys):
         FROM `bigquery-public-data.usa_names.usa_1910_current`
         WHERE state LIKE 'W%'
     """.format(
-        project, dataset_id, table_id
+        table_id
     )
 
     job = client.query(sql)  # API request.
     job.result()  # Waits for the query to finish.
 
-    print(
-        'Created new view "{}.{}.{}".'.format(
-            job.destination.project,
-            job.destination.dataset_id,
-            job.destination.table_id,
-        )
-    )
-
-    out, _ = capsys.readouterr()
-    assert 'Created new view "{}.{}.{}".'.format(project, dataset_id, table_id) in out
-
     # Test that listing query result rows succeeds so that generic query
     # processing tools work with DDL statements.
     rows = list(job)
-    assert len(rows) == 0
-
     if pandas is not None:
         df = job.to_dataframe()
-        assert len(df) == 0
+        if len(df) == 0 and len(rows) == 0:
+            print('Created new view "{}".'.format(table_id))
+    elif len(rows) == 0:
+        print('Created new view "{}".'.format(table_id))
 
     # [END bigquery_ddl_create_view]
