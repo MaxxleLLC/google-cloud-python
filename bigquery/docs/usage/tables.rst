@@ -40,7 +40,7 @@ Determine if a table exists with the
 Browse data rows in a table with the
 :func:`~google.cloud.bigquery.client.Client.list_rows` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/browse_table_data.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_browse_table]
@@ -142,6 +142,15 @@ Copy a table with the
    :dedent: 4
    :start-after: [START bigquery_copy_table]
    :end-before: [END bigquery_copy_table]
+
+Copy multiple tables with the
+:func:`~google.cloud.bigquery.client.Client.copy_table` method:
+
+ .. literalinclude:: ../samples/copy_table_multiple_source.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_copy_table_multiple_source]
+   :end-before: [END bigquery_copy_table_multiple_source]
 
 Copy table data to Google Cloud Storage with the
 :func:`~google.cloud.bigquery.client.Client.extract_table` method:
