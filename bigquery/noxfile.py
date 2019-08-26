@@ -103,7 +103,7 @@ def system(session):
     )
 
 
-@nox.session(python=["2.7", "3.7"])
+@nox.session(python=["2.7", "3.6"])
 def snippets(session):
     """Run the snippets test suite."""
 
@@ -120,7 +120,7 @@ def snippets(session):
     session.install("-e", ".[all]")
 
     # Run py.test against the snippets tests.
-    # session.run("py.test", os.path.join("docs", "snippets.py"), *session.posargs)
+    session.run("py.test", os.path.join("docs", "snippets.py"), *session.posargs)
     session.run("py.test", "samples", *session.posargs)
 
 
