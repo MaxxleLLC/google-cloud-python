@@ -46,6 +46,9 @@ Add a column to the existing table with the
    :start-after: [START bigquery_add_column_query_append]
    :end-before: [END bigquery_add_column_query_append]
 
+Writing query results to a destination table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 See BigQuery documentation for more information on
 `writing query results <https://cloud.google.com/bigquery/docs/writing-results>`_.
 
