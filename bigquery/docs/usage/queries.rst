@@ -52,6 +52,18 @@ Run a query and just check for how many rows with the
    :start-after: [START bigquery_query_total_rows]
    :end-before: [END bigquery_query_total_rows]
 
+ Run a query to create a view
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Create a view via a DDL query with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/ddl_create_view.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_ddl_create_view]
+   :end-before: [END bigquery_ddl_create_view]
+
 Run a query to update a table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
