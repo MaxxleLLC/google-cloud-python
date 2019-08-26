@@ -45,7 +45,7 @@ destination table.
 Write query results to a table, using a customer-managed encryption key from
 Cloud KMS for the destination table.
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/client_query_destination_table_cmek.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_destination_table_cmek]
