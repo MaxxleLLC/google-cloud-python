@@ -19,6 +19,16 @@ import pytest
 
 from google.cloud import bigquery
 from google.cloud import bigquery_v2
+from google.cloud import storage
+
+from test_utils.retry import RetryErrors
+from google.api_core.exceptions import InternalServerError
+from google.api_core.exceptions import ServiceUnavailable
+from google.api_core.exceptions import TooManyRequests
+
+retry_storage_errors = RetryErrors(
+    (TooManyRequests, InternalServerError, ServiceUnavailable)
+)
 
 
 @pytest.fixture(scope="module")
@@ -132,3 +142,16 @@ def model_id(client, dataset_id):
 
     client.query(sql).result()
     return model_id
+
+
+@pytest.fixture
+def bucket():
+    now = datetime.datetime.now()
+    bucket_name = "bucket_sample_{}_{}".format(
+        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
+    )
+
+    storage_client = storage.Client()
+    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
+    yield bucket
+    bucket.delete(force=True)
