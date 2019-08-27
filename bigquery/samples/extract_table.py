@@ -13,18 +13,19 @@
 # limitations under the License.
 
 
+from test_utils.retry import RetryErrors
+from google.api_core.exceptions import InternalServerError
+from google.api_core.exceptions import ServiceUnavailable
+from google.api_core.exceptions import TooManyRequests
+
+retry_storage_errors = RetryErrors(
+    (TooManyRequests, InternalServerError, ServiceUnavailable)
+)
+
+
 def extract_table(client, bucket, table_id):
 
     # [START bigquery_extract_table]
-    from test_utils.retry import RetryErrors
-    from google.api_core.exceptions import InternalServerError
-    from google.api_core.exceptions import ServiceUnavailable
-    from google.api_core.exceptions import TooManyRequests
-
-    retry_storage_errors = RetryErrors(
-        (TooManyRequests, InternalServerError, ServiceUnavailable)
-    )
-
     # TODO(developer): Import the client library.
     # from google.cloud import bigquery
 
