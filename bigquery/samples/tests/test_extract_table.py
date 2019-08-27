@@ -16,10 +16,13 @@
 from .. import extract_table
 
 
-def test_extract_table(capsys, client, bucket):
+def test_extract_table(capsys, client, bucket_name, table_with_data_id):
 
-    table_id = "bigquery-public-data.samples.shakespeare"
-    extract_table.extract_table(client, bucket, table_id)
+    extract_table.extract_table(client, bucket_name, table_with_data_id)
     out, err = capsys.readouterr()
-    assert "Exported {} to ".format(table_id) in out
-    assert "gs://{}/shakespeare.csv".format(bucket.name) in out
+    assert (
+        "Exported {} to gs://{}/shakespeare.csv".format(
+            table_with_data_id, bucket_name.name
+        )
+        in out
+    )

@@ -98,10 +98,8 @@ def table_id(client, dataset_id):
 
 
 @pytest.fixture
-def table_w_data(client):
-    dataset = client.get_dataset("bigquery-public-data.samples")
-    table = dataset.table("shakespeare")
-    return table
+def table_with_data_id(client):
+    return "bigquery-public-data.samples.shakespeare"
 
 
 @pytest.fixture
@@ -156,9 +154,9 @@ def model_id(client, dataset_id):
 
 
 @pytest.fixture
-def bucket():
+def bucket_name():
     now = datetime.datetime.now()
-    bucket_name = "extract_shakespeare_{}_{}".format(
+    bucket_name = "bucket_sample_{}_{}".format(
         now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
     )
 

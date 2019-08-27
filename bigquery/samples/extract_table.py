@@ -25,14 +25,19 @@ def extract_table(client, bucket, table_id):
         (TooManyRequests, InternalServerError, ServiceUnavailable)
     )
 
+    # TODO(developer): Import the client library.
     # from google.cloud import bigquery
 
     # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
-    # TODO(developer): Set bucket to the Cloud Storage Bucket where to extract the table.
+    # TODO(developer): Import the Storage library.
     # from google.cloud import storage
+
+    # TODO(developer): Construct a Storage client object.
     # storage_client = storage.Client()
+
+    # TODO(developer): Set bucket to the Cloud Storage Bucket where to extract the table.
     # bucket_name = "your_bucket_name"
     # bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
 
@@ -48,10 +53,9 @@ def extract_table(client, bucket, table_id):
         # Location must match that of the source table.
         location="US",
     )
-    extract_job.result()  # Waits for job to complete.
+    extract_job.result()
 
     blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv")
     if blob.exists and blob.size > 0:
         print("Exported {} to {}".format(table_id, destination_uri))
-
     # [END bigquery_extract_table]
