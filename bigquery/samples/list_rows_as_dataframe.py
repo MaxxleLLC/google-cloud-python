@@ -13,19 +13,25 @@
 # limitations under the License.
 
 
-def list_rows_as_dataframe(client):
+def list_rows_as_dataframe(client, table_id):
 
     # [START bigquery_list_rows_dataframe]
+    # TODO(developer): Import the client library.
     # from google.cloud import bigquery
+
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
-    table = client.get_table(table_ref)
+    # TODO(developer): Set table_id to the ID of the table to fetch.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    table = client.get_table(table_id)
 
     df = client.list_rows(table).to_dataframe()
-    assert isinstance(df, pandas.DataFrame)
-    assert len(list(df)) == len(table.schema)  # verify the number of columns
-    assert len(df) == table.num_rows  # verify the number of rows
+
+    # verify the number of rows and columns
+    if len(list(df)) == len(table.schema) and len(df) == table.num_rows:
+        print('Retrieved table {} rows as a "pandas.DataFrame"'.format(table_id))
 
     # [END bigquery_list_rows_dataframe]
+    return df

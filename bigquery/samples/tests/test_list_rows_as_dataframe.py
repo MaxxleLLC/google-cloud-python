@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
+import pandas
 from .. import list_rows_as_dataframe
 
 
-def test_list_rows_as_dataframe(capsys, client):
+def test_list_rows_as_dataframe(capsys, client, table_with_data_id):
 
+    df = list_rows_as_dataframe.list_rows_as_dataframe(client, table_with_data_id)
     out, err = capsys.readouterr()
-    assert 
+    assert 'Retrieved table {} rows as a "pandas.DataFrame"'.format(table_with_data_id)
+    assert isinstance(df, pandas.DataFrame)
