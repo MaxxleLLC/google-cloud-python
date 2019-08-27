@@ -16,13 +16,11 @@
 from .. import extract_table
 
 
-def test_extract_table(capsys, client, bucket_name, table_with_data_id):
+def test_extract_table(capsys, client, bucket, table_with_data_id):
 
-    extract_table.extract_table(client, bucket_name, table_with_data_id)
+    extract_table.extract_table(client, bucket, table_with_data_id)
     out, err = capsys.readouterr()
     assert (
-        "Exported {} to gs://{}/shakespeare.csv".format(
-            table_with_data_id, bucket_name.name
-        )
+        "Exported {} to gs://{}/shakespeare.csv".format(table_with_data_id, bucket.name)
         in out
     )

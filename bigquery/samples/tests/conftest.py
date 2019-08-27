@@ -154,7 +154,7 @@ def model_id(client, dataset_id):
 
 
 @pytest.fixture
-def bucket_name():
+def bucket():
     now = datetime.datetime.now()
     bucket_name = "bucket_sample_{}_{}".format(
         now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
