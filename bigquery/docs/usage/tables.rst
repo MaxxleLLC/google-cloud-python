@@ -189,6 +189,15 @@ Compress table data and copy to Google Cloud Storage with the
    :start-after: [START bigquery_extract_table]
    :end-before: [END bigquery_extract_table]
 
+Copy table data to Google Cloud Storage json-file with the
+:func:`~google.cloud.bigquery.client.Client.extract_table` method:
+.. literalinclude:: ../samples/extract_table_json.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_extract_table_json]
+   :end-before: [END bigquery_extract_table_json]
+
+
 Deleting a Table
 ^^^^^^^^^^^^^^^^
 
@@ -257,12 +266,6 @@ Delete a table with the
 
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/extract_table_json.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_extract_table_json]
-   :end-before: [END bigquery_extract_table_json]
 
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:

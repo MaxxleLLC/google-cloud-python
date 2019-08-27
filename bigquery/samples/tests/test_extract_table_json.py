@@ -16,15 +16,13 @@
 from .. import extract_table_json
 
 
-def test_extract_table_json(capsys, client):
+def test_extract_table_json(capsys, client, bucket, table_with_data_id):
 
-    from test_utils.retry import RetryErrors
-    from google.api_core.exceptions import InternalServerError
-    from google.api_core.exceptions import ServiceUnavailable
-    from google.api_core.exceptions import TooManyRequests
-    retry_storage_errors = RetryErrors(
-        (TooManyRequests, InternalServerError, ServiceUnavailable)
-    )
-
+    extract_table_json.extract_table_json(client, bucket, table_with_data_id)
     out, err = capsys.readouterr()
-    assert 
+    assert (
+        "Exported {} to gs://{}/shakespeare.json".format(
+            table_with_data_id, bucket.name
+        )
+        in out
+    )
