@@ -16,15 +16,15 @@
 from .. import extract_table_compressed
 
 
-def test_extract_table_compressed(capsys, client):
+def test_extract_table_compressed(capsys, client, bucket_name, table_with_data_id):
 
-    from test_utils.retry import RetryErrors
-    from google.api_core.exceptions import InternalServerError
-    from google.api_core.exceptions import ServiceUnavailable
-    from google.api_core.exceptions import TooManyRequests
-    retry_storage_errors = RetryErrors(
-        (TooManyRequests, InternalServerError, ServiceUnavailable)
+    extract_table_compressed.extract_table_compressed(
+        client, bucket_name, table_with_data_id
     )
-
     out, err = capsys.readouterr()
-    assert 
+    assert (
+        "Exported {} to gs://{}/shakespeare.csv".format(
+            table_with_data_id, bucket_name.name
+        )
+        in out
+    )

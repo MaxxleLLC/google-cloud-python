@@ -180,6 +180,15 @@ Copy table data to Google Cloud Storage with the
    :start-after: [START bigquery_extract_table]
    :end-before: [END bigquery_extract_table]
 
+Copy and compress table data to Google Cloud Storage with the
+:func:`~google.cloud.bigquery.client.Client.extract_table` method:
+
+.. literalinclude:: ../samples/extract_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_extract_table]
+   :end-before: [END bigquery_extract_table]
+
 Deleting a Table
 ^^^^^^^^^^^^^^^^
 

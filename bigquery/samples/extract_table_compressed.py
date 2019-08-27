@@ -13,36 +13,52 @@
 # limitations under the License.
 
 
-def extract_table_compressed(client, to_delete):
+from test_utils.retry import RetryErrors
+from google.api_core.exceptions import InternalServerError
+from google.api_core.exceptions import ServiceUnavailable
+from google.api_core.exceptions import TooManyRequests
+
+retry_storage_errors = RetryErrors(
+    (TooManyRequests, InternalServerError, ServiceUnavailable)
+)
+
+
+def extract_table_compressed(client, bucket, table_id):
 
     # [START bigquery_extract_table_compressed]
-    bucket_name = "extract_shakespeare_compress_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
 
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.csv.gz")
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
+    # TODO(developer): Import the Storage library.
+    # from google.cloud import storage
+
+    # TODO(developer): Construct a Storage client object.
+    # storage_client = storage.Client()
+
+    # TODO(developer): Set bucket to the Cloud Storage Bucket where to extract the table.
+    # bucket_name = "your_bucket_name"
+    # bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
+
+    # TODO(developer): Set table_id to the ID of the table to extract.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    destination_uri = "gs://{}/{}".format(bucket.name, "shakespeare.csv.gz")
+    table = client.get_table(table_id)
+
     job_config = bigquery.job.ExtractJobConfig()
     job_config.compression = bigquery.Compression.GZIP
-
     extract_job = client.extract_table(
-        table_ref,
+        table,
         destination_uri,
         # Location must match that of the source table.
         location="US",
         job_config=job_config,
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
+    )
+    extract_job.result()
 
     blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv.gz")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
-
+    if blob.exists and blob.size > 0:
+        print("Exported {} to {}".format(table_id, destination_uri))
     # [END bigquery_extract_table_compressed]
