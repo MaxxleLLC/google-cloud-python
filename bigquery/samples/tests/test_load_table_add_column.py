@@ -16,9 +16,10 @@
 from .. import load_table_add_column
 
 
-def test_load_table_add_column(capsys, client):
+def test_load_table_add_column(capsys, client, random_table_id):
 
-    import os
-
+    load_table_add_column.load_table_add_column(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Table {} contains 1 column(s).".format(random_table_id) in out
+    assert "Loaded 2 row(s) into {}.".format(random_table_id) in out
+    assert "Table {} now contains 2 column(s).".format(random_table_id) in out
