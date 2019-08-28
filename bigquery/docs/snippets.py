@@ -1106,39 +1106,6 @@ def test_load_table_relax_column(client, to_delete):
     assert table.num_rows > 0
 
 
-def test_extract_table_json(client, to_delete):
-    bucket_name = "extract_shakespeare_json_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
-
-    # [START bigquery_extract_table_json]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
-
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.json")
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
-    job_config = bigquery.job.ExtractJobConfig()
-    job_config.destination_format = bigquery.DestinationFormat.NEWLINE_DELIMITED_JSON
-
-    extract_job = client.extract_table(
-        table_ref,
-        destination_uri,
-        job_config=job_config,
-        # Location must match that of the source table.
-        location="US",
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
-    # [END bigquery_extract_table_json]
-
-    blob = retry_storage_errors(bucket.get_blob)("shakespeare.json")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
-
-
 def test_undelete_table(client, to_delete):
     dataset_id = "undelete_table_dataset_{}".format(_millis())
     table_id = "undelete_table_table_{}".format(_millis())
