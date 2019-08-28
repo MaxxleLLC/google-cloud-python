@@ -13,10 +13,36 @@
 # limitations under the License.
 
 
+import pytest
+
+try:
+    import fastparquet
+except (ImportError, AttributeError):
+    fastparquet = None
+try:
+    import pandas
+except (ImportError, AttributeError):
+    pandas = None
+try:
+    import pyarrow
+except (ImportError, AttributeError):
+    pyarrow = None
+
 from .. import load_table_from_dataframe
 
 
-def test_load_table_from_dataframe(capsys, client):
+@pytest.mark.skipif(pandas is None, reason="Requires `pandas`")
+@pytest.mark.parametrize("parquet_engine", ["pyarrow", "fastparquet"])
+def test_load_table_from_dataframe(capsys, client, random_table_id, parquet_engine):
 
+    if parquet_engine == "pyarrow" and pyarrow is None:
+        pytest.skip("Requires `pyarrow`")
+    if parquet_engine == "fastparquet" and fastparquet is None:
+        pytest.skip("Requires `fastparquet`")
+
+    pandas.set_option("io.parquet.engine", parquet_engine)
+
+    load_table_from_dataframe.load_table_from_dataframe(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Table {} contains 4 row(s)".format(random_table_id) in out
+    assert "['release_year', 'title', 'wikidata_id']" in out

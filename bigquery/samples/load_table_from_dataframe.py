@@ -13,48 +13,37 @@
 # limitations under the License.
 
 
-def load_table_from_dataframe(client, to_delete, parquet_engine):
+def load_table_from_dataframe(client, table_id):
 
     # [START bigquery_load_table_dataframe]
-    if parquet_engine == "pyarrow" and pyarrow is None:
-        pytest.skip("Requires `pyarrow`")
-    if parquet_engine == "fastparquet" and fastparquet is None:
-        pytest.skip("Requires `fastparquet`")
-
-    pandas.set_option("io.parquet.engine", parquet_engine)
-
-    dataset_id = "load_table_from_dataframe_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
+    # TODO(developer): Import the client library.
     # from google.cloud import bigquery
-    # import pandas
-    # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
 
-    dataset_ref = client.dataset(dataset_id)
-    table_ref = dataset_ref.table("monty_python")
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    import pandas
+
     records = [
-        {"title": "The Meaning of Life", "release_year": 1983},
-        {"title": "Monty Python and the Holy Grail", "release_year": 1975},
-        {"title": "Life of Brian", "release_year": 1979},
-        {"title": "And Now for Something Completely Different", "release_year": 1971},
+        {"title": u"The Meaning of Life", "release_year": 1983},
+        {"title": u"Monty Python and the Holy Grail", "release_year": 1975},
+        {"title": u"Life of Brian", "release_year": 1979},
+        {"title": u"And Now for Something Completely Different", "release_year": 1971},
     ]
     # Optionally set explicit indices.
     # If indices are not specified, a column will be created for the default
     # indices created by pandas.
-    index = ["Q24980", "Q25043", "Q24953", "Q16403"]
+    index = [u"Q24980", u"Q25043", u"Q24953", u"Q16403"]
     dataframe = pandas.DataFrame(records, index=pandas.Index(index, name="wikidata_id"))
 
-    job = client.load_table_from_dataframe(dataframe, table_ref, location="US")
+    job = client.load_table_from_dataframe(dataframe, table_id, location="US")
+    job.result()
 
-    job.result()  # Waits for table load to complete.
-
-    assert job.state == "DONE"
-    table = client.get_table(table_ref)
-    assert table.num_rows == 4
+    table = client.get_table(table_id)
+    print("Table {} contains {} row(s)".format(table_id, table.num_rows))
     column_names = [field.name for field in table.schema]
-    assert sorted(column_names) == ["release_year", "title", "wikidata_id"]
-
+    print(sorted(column_names))
     # [END bigquery_load_table_dataframe]
