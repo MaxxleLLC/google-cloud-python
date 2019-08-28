@@ -13,10 +13,15 @@
 # limitations under the License.
 
 
-from .. import load_and_query_partitioned_table
+from .. import load_partitioned_table
+from .. import query_partitioned_table
 
 
-def test_load_and_query_partitioned_table(capsys, client):
+def test_load_and_query_partitioned_table(capsys, client, random_table_id):
 
+    load_partitioned_table.load_partitioned_table(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows to table {}".format(random_table_id) in out
+    query_partitioned_table.query_partitioned_table(client, random_table_id)
+    out, err = capsys.readouterr()
+    assert "29 states were admitted to the US in the 1800s" in out

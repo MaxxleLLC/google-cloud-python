@@ -76,6 +76,17 @@ Create a table with the nested repeated schema with the
    :start-after: [START bigquery_nested_repeated_schema]
    :end-before: [END bigquery_nested_repeated_schema]
 
+Loading a Table
+^^^^^^^^^^^^^^^
+
+Load a partitioned table with the
+:func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
+
+.. literalinclude:: ../samples/load_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_load_table_partitioned]
+   :end-before: [END bigquery_load_table_partitioned]
 
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
@@ -267,23 +278,11 @@ Delete a table with the
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
 
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
 .. literalinclude:: ../samples/list_rows_as_dataframe.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_list_rows_dataframe]
    :end-before: [END bigquery_list_rows_dataframe]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/load_and_query_partitioned_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_partitioned_table]
-   :end-before: [END bigquery_query_partitioned_table]
 
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:

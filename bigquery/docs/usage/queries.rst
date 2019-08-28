@@ -93,6 +93,16 @@ Write a query results to a table, allowing fields relaxation with the
    :start-after: [START bigquery_relax_column_query_append]
    :end-before: [END bigquery_relax_column_query_append]
 
+Write a query results to a partitioned table with the
+:func:`~google.cloud.bigquery.client.Client.query` method:
+
+.. literalinclude:: ../samples/query_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_partitioned_table]
+   :end-before: [END bigquery_query_partitioned_table]
+
+
 Run a query using a named query parameter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
