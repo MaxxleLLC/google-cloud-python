@@ -97,6 +97,16 @@ Load table data from a file with the
    :start-after: [START bigquery_load_from_file]
    :end-before: [END bigquery_load_from_file]
 
+Load table data from a file and add a column with the
+:func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
+
+.. literalinclude:: ../samples/load_table_add_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_add_column_load_append]
+   :end-before: [END bigquery_add_column_load_append]
+
+
 Load a CSV file from Cloud Storage with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
 
