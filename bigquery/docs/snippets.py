@@ -1427,23 +1427,6 @@ def test_query_results_as_dataframe(client):
 
 
 @pytest.mark.skipif(pandas is None, reason="Requires `pandas`")
-def test_list_rows_as_dataframe(client):
-    # [START bigquery_list_rows_dataframe]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
-    table = client.get_table(table_ref)
-
-    df = client.list_rows(table).to_dataframe()
-    # [END bigquery_list_rows_dataframe]
-    assert isinstance(df, pandas.DataFrame)
-    assert len(list(df)) == len(table.schema)  # verify the number of columns
-    assert len(df) == table.num_rows  # verify the number of rows
-
-
-@pytest.mark.skipif(pandas is None, reason="Requires `pandas`")
 @pytest.mark.parametrize("parquet_engine", ["pyarrow", "fastparquet"])
 def test_load_table_from_dataframe(client, to_delete, parquet_engine):
     if parquet_engine == "pyarrow" and pyarrow is None:
