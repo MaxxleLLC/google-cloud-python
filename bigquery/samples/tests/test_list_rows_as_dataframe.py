@@ -13,8 +13,12 @@
 # limitations under the License.
 
 
-import pandas
 import pytest
+
+try:
+    import pandas
+except (ImportError, AttributeError):
+    pandas = None
 
 from .. import list_rows_as_dataframe
 
