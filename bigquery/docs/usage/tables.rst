@@ -76,6 +76,17 @@ Create a table with the nested repeated schema with the
    :start-after: [START bigquery_nested_repeated_schema]
    :end-before: [END bigquery_nested_repeated_schema]
 
+Loading a Table
+^^^^^^^^^^^^^^^
+
+Load a partitioned table with the
+:func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
+
+.. literalinclude:: ../samples/load_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_load_table_partitioned]
+   :end-before: [END bigquery_load_table_partitioned]
 
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
