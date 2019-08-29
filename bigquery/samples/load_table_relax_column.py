@@ -13,37 +13,30 @@
 # limitations under the License.
 
 
-def load_table_relax_column(client, to_delete):
+def load_table_relax_column(client, table_id):
 
     # [START bigquery_relax_column_load_append]
-    dataset_id = "load_table_relax_column_{}".format(_millis())
-    dataset_ref = client.dataset(dataset_id)
-    dataset = bigquery.Dataset(dataset_ref)
-    dataset.location = "US"
-    dataset = client.create_dataset(dataset)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    snippets_dir = os.path.abspath(os.path.dirname(__file__))
-    filepath = os.path.join(
-        snippets_dir, "..", "..", "bigquery", "tests", "data", "people.csv"
-    )
-    table_ref = dataset_ref.table("my_table")
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    import os
+
+    samples_dir = os.path.abspath(os.path.dirname(__file__))
+    filepath = os.path.join(samples_dir, "tests", "data", "people.csv")
     old_schema = [
         bigquery.SchemaField("full_name", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("age", "INTEGER", mode="REQUIRED"),
         bigquery.SchemaField("favorite_color", "STRING", mode="REQUIRED"),
     ]
-    table = client.create_table(bigquery.Table(table_ref, schema=old_schema))
-
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # dataset_ref = client.dataset('my_dataset')
-    # filepath = 'path/to/your_file.csv'
+    table = client.create_table(bigquery.Table(table_id, schema=old_schema))
 
     # Retrieves the destination table and checks the number of required fields
-    table_id = "my_table"
-    table_ref = dataset_ref.table(table_id)
-    table = client.get_table(table_ref)
+    table = client.get_table(table_id)
     original_required_fields = sum(field.mode == "REQUIRED" for field in table.schema)
     # In this example, the existing table has 3 required fields.
     print("{} fields in the schema are required.".format(original_required_fields))
@@ -68,25 +61,15 @@ def load_table_relax_column(client, to_delete):
     with open(filepath, "rb") as source_file:
         job = client.load_table_from_file(
             source_file,
-            table_ref,
+            table,
             location="US",  # Must match the destination dataset location.
             job_config=job_config,
-        )  # API request
-
-    job.result()  # Waits for table load to complete.
-    print(
-        "Loaded {} rows into {}:{}.".format(
-            job.output_rows, dataset_id, table_ref.table_id
         )
-    )
+    job.result()
+    print("Loaded {} rows into {}.".format(job.output_rows, table_id))
 
     # Checks the updated number of required fields
     table = client.get_table(table)
     current_required_fields = sum(field.mode == "REQUIRED" for field in table.schema)
     print("{} fields in the schema are now required.".format(current_required_fields))
-    assert original_required_fields - current_required_fields == 1
-    assert len(table.schema) == 3
-    assert table.schema[2].mode == "NULLABLE"
-    assert table.num_rows > 0
-
     # [END bigquery_relax_column_load_append]

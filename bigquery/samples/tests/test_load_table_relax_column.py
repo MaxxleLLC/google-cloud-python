@@ -16,9 +16,10 @@
 from .. import load_table_relax_column
 
 
-def test_load_table_relax_column(capsys, client):
+def test_load_table_relax_column(capsys, client, random_table_id):
 
-    import os
-
+    load_table_relax_column.load_table_relax_column(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "3 fields in the schema are required." in out
+    assert "Loaded 2 rows into {}.".format(random_table_id) in out
+    assert "2 fields in the schema are now required." in out
