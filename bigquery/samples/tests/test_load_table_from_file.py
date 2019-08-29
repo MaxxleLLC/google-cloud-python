@@ -16,9 +16,8 @@
 from .. import load_table_from_file
 
 
-def test_load_table_from_file(capsys, client):
+def test_load_table_from_file(capsys, client, random_table_id):
 
-    import os
-
+    load_table_from_file.load_table_from_file(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 2 rows into {}.".format(random_table_id) in out

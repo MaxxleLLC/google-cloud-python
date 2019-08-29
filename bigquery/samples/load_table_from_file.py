@@ -13,49 +13,30 @@
 # limitations under the License.
 
 
-def load_table_from_file(client, to_delete):
+def load_table_from_file(client, table_id):
 
     # [START bigquery_load_from_file]
-    """Upload table data from a CSV file."""
-    dataset_id = "load_table_from_file_dataset_{}".format(_millis())
-    table_id = "load_table_from_file_table_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    dataset.location = "US"
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-    snippets_dir = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        snippets_dir, "..", "..", "bigquery", "tests", "data", "people.csv"
-    )
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # filename = '/path/to/file.csv'
-    # dataset_id = 'my_dataset'
-    # table_id = 'my_table'
 
-    dataset_ref = client.dataset(dataset_id)
-    table_ref = dataset_ref.table(table_id)
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    import os
+
+    samples_dir = os.path.abspath(os.path.dirname(__file__))
+    filepath = os.path.join(samples_dir, "tests", "data", "people.csv")
+
     job_config = bigquery.LoadJobConfig()
     job_config.source_format = bigquery.SourceFormat.CSV
     job_config.skip_leading_rows = 1
     job_config.autodetect = True
 
-    with open(filename, "rb") as source_file:
-        job = client.load_table_from_file(source_file, table_ref, job_config=job_config)
+    with open(filepath, "rb") as source_file:
+        job = client.load_table_from_file(source_file, table_id, job_config=job_config)
+    job.result()
 
-    job.result()  # Waits for table load to complete.
-
-    print("Loaded {} rows into {}:{}.".format(job.output_rows, dataset_id, table_id))
-
-    table = client.get_table(table_ref)
-    rows = list(client.list_rows(table))  # API request
-
-    assert len(rows) == 2
-    # Order is not preserved, so compare individually
-    row1 = bigquery.Row(("Wylma Phlyntstone", 29), {"full_name": 0, "age": 1})
-    assert row1 in rows
-    row2 = bigquery.Row(("Phred Phlyntstone", 32), {"full_name": 0, "age": 1})
-    assert row2 in rows
-
+    print("Loaded {} rows into {}.".format(job.output_rows, table_id))
     # [END bigquery_load_from_file]
