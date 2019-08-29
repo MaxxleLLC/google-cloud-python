@@ -91,7 +91,7 @@ Load a partitioned table with the
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/load_table_from_file.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_load_from_file]
