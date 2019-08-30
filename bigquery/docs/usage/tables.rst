@@ -133,6 +133,15 @@ Load table from a GCS URI using json format and auto-detected schema with the
    :start-after: [START bigquery_load_table_gcs_json_autodetect]
    :end-before: [END bigquery_load_table_gcs_json_autodetect]
 
+Load table from a GCS URI using avro format with the
+:func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
+
+.. literalinclude:: ../samples/load_table_from_uri_avro.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_load_table_gcs_avro]
+   :end-before: [END bigquery_load_table_gcs_avro]
+
 Load a CSV file from Cloud Storage with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
 
