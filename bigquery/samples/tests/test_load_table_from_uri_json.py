@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_json
 
 
-def test_load_table_from_uri_json(capsys, client):
+def test_load_table_from_uri_json(capsys, client, random_table_id):
 
+    load_table_from_uri_json.load_table_from_uri_json(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
