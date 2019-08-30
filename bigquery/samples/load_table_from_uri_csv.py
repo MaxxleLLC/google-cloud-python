@@ -13,19 +13,17 @@
 # limitations under the License.
 
 
-def load_table_from_uri_csv(client, to_delete, capsys):
+def load_table_from_uri_csv(client, table_id):
 
     # [START bigquery_load_table_gcs_csv]
-    dataset_id = "load_table_from_uri_csv_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
 
-    dataset_ref = client.dataset(dataset_id)
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = 'your-project.your_dataset.your_table'
+
     job_config = bigquery.LoadJobConfig()
     job_config.schema = [
         bigquery.SchemaField("name", "STRING"),
@@ -36,18 +34,9 @@ def load_table_from_uri_csv(client, to_delete, capsys):
     job_config.source_format = bigquery.SourceFormat.CSV
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states.csv"
 
-    load_job = client.load_table_from_uri(
-        uri, dataset_ref.table("us_states"), job_config=job_config
-    )  # API request
-    print("Starting job {}".format(load_job.job_id))
+    load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
+    load_job.result()
 
-    load_job.result()  # Waits for table load to complete.
-    print("Job finished.")
-
-    destination_table = client.get_table(dataset_ref.table("us_states"))
+    destination_table = client.get_table(table_id)
     print("Loaded {} rows.".format(destination_table.num_rows))
-
-    out, _ = capsys.readouterr()
-    assert "Loaded 50 rows." in out
-
     # [END bigquery_load_table_gcs_csv]

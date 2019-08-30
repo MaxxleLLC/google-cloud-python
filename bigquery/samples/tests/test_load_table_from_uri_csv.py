@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_csv
 
 
-def test_load_table_from_uri_csv(capsys, client):
+def test_load_table_from_uri_csv(capsys, client, random_table_id):
 
+    load_table_from_uri_csv.load_table_from_uri_csv(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
