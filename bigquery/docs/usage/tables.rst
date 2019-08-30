@@ -156,7 +156,7 @@ See also: `Loading CSV data from Cloud Storage
 
 Load a JSON file from Cloud Storage:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/load_table_from_uri_json.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_load_table_gcs_json]
