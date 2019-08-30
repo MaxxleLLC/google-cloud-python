@@ -13,10 +13,17 @@
 # limitations under the License.
 
 
-import pandas
+import pytest
+
+try:
+    import pandas
+except (ImportError, AttributeError):
+    pandas = None
+
 from .. import list_rows_as_dataframe
 
 
+@pytest.mark.skipif(pandas is None, reason="Requires `pandas`")
 def test_list_rows_as_dataframe(capsys, client, table_with_data_id):
 
     df = list_rows_as_dataframe.list_rows_as_dataframe(client, table_with_data_id)

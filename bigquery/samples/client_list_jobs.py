@@ -19,6 +19,8 @@ def client_list_jobs(client):
     # TODO(developer): Import the client library.
     # from google.cloud import bigquery
 
+    import datetime
+
     # TODO(developer): Construct a BigQuery client object.
     # project = "my_project"  # replace with your project ID
     # client = bigquery.Client(project=project)
@@ -30,8 +32,6 @@ def client_list_jobs(client):
         print("{}".format(job.job_id))
 
     # The following are examples of additional optional parameters:
-
-    import datetime
 
     # Use min_creation_time and/or max_creation_time to specify a time window.
     print("Jobs from the last ten minutes:")
