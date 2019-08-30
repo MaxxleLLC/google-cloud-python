@@ -26,10 +26,9 @@ def table_insert_rows(client, table_id):
     # table_id = "your-project.your_dataset.your_table"
 
     table = client.get_table(table_id)
-
     rows_to_insert = [(u"Phred Phlyntstone", 32), (u"Wylma Phlyntstone", 29)]
 
     errors = client.insert_rows(table, rows_to_insert)
     if errors == []:
-        print("New rows have been added")
+        print("New rows have been added.")
     # [END bigquery_table_insert_rows]
