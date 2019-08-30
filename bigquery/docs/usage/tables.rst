@@ -145,7 +145,7 @@ Load table from a GCS URI using avro format with the
 Load a CSV file from Cloud Storage with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_uri` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/load_table_from_uri_csv.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_load_table_gcs_csv]
