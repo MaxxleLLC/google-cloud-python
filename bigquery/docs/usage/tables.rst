@@ -107,7 +107,7 @@ Load table data from a file and add a column with the
    :end-before: [END bigquery_add_column_load_append]
 
 Load table data from a file, allowing fields relaxation with the
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
+:func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
 
 .. literalinclude:: ../samples/load_table_relax_column.py
    :language: python
