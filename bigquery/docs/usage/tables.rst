@@ -332,15 +332,6 @@ Delete a table with the
 [-REPLACE_COMMENT-]
 :func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
 
-.. literalinclude:: ../samples/load_table_from_uri_cmek.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_load_table_gcs_json_cmek]
-   :end-before: [END bigquery_load_table_gcs_json_cmek]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
 .. literalinclude:: ../samples/load_table_from_uri_orc.py
    :language: python
    :dedent: 4

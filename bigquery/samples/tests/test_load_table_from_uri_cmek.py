@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_cmek
 
 
-def test_load_table_from_uri_cmek(capsys, client):
+def test_load_table_from_uri_cmek(capsys, client, random_table_id):
 
+    load_table_from_uri_cmek.load_table_from_uri_cmek(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Table {} loaded.".format(random_table_id) in out

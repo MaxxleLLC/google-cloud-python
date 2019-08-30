@@ -13,20 +13,17 @@
 # limitations under the License.
 
 
-def load_table_from_uri_cmek(client, to_delete):
+def load_table_from_uri_cmek(client, table_id):
 
     # [START bigquery_load_table_gcs_json_cmek]
-    dataset_id = "load_table_from_uri_cmek_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    dataset.location = "US"
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
+    from google.cloud import bigquery
 
-    # from google.cloud import bigquery
+    # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
 
-    dataset_ref = client.dataset(dataset_id)
+    # TODO(developer): Set table_id to the ID of the destination table.
+    # table_id = 'your-project.your_dataset.your_table'
+
     job_config = bigquery.LoadJobConfig()
     job_config.autodetect = True
     job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
@@ -39,20 +36,15 @@ def load_table_from_uri_cmek(client, to_delete):
     encryption_config = bigquery.EncryptionConfiguration(kms_key_name=kms_key_name)
     job_config.destination_encryption_configuration = encryption_config
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
-
     load_job = client.load_table_from_uri(
         uri,
-        dataset_ref.table("us_states"),
+        table_id,
         location="US",  # Location must match that of the destination dataset.
         job_config=job_config,
-    )  # API request
+    )
+    load_job.result()
 
-    assert load_job.job_type == "load"
-
-    load_job.result()  # Waits for table load to complete.
-
-    assert load_job.state == "DONE"
-    table = client.get_table(dataset_ref.table("us_states"))
-    assert table.encryption_configuration.kms_key_name == kms_key_name
-
+    table = client.get_table(table_id)
+    if table.encryption_configuration.kms_key_name == kms_key_name:
+        print("Table {} loaded.".format(table_id))
     # [END bigquery_load_table_gcs_json_cmek]
