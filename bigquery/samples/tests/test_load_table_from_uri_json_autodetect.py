@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-from .. import load_table_from_uri_autodetect
+from .. import load_table_from_uri_json_autodetect
 
 
-def test_load_table_from_uri_autodetect(capsys, client):
+def test_load_table_from_uri_json_autodetect(capsys, client, random_table_id):
 
+    load_table_from_uri_json_autodetect.load_table_from_uri_json_autodetect(
+        client, random_table_id
+    )
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
