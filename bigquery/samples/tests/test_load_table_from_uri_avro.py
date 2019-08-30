@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_avro
 
 
-def test_load_table_from_uri_avro(capsys, client):
+def test_load_table_from_uri_avro(capsys, client, random_table_id):
 
+    load_table_from_uri_avro.load_table_from_uri_avro(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
