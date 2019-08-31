@@ -943,6 +943,15 @@ TransferConfig = _reflection.GeneratedProtocolMessageType(
           created.
       params:
           Data transfer specific parameters.
+          For example,
+              params:{
+                      '"query": 'query_string',
+                      'file_format':'CSV',
+                      'field_delimiter':',',
+                      'destination_table_name_template':'example_table',
+                      'skip_leading_rows': "0", 
+                      'PRIVACY_LEVEL':'PRIVATE' or 'SHARED'
+                    }
       schedule:
           Data transfer schedule. If the data source does not support a
           custom schedule, this should be empty. If it is empty, the
