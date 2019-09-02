@@ -254,8 +254,10 @@ def dataframe_to_bq_schema(dataframe, bq_schema):
                     "https://github.com/googleapis/google-cloud-python/issues/8191"
                 )
         bq_schema_index = {field.name: field for field in bq_schema}
+        bq_schema_unused = set(bq_schema_index.keys())
     else:
         bq_schema_index = {}
+        bq_schema_unused = set()
 
     bq_schema_out = []
     for column, dtype in list_columns_and_indexes(dataframe):
@@ -263,6 +265,7 @@ def dataframe_to_bq_schema(dataframe, bq_schema):
         bq_field = bq_schema_index.get(column)
         if bq_field:
             bq_schema_out.append(bq_field)
+            bq_schema_unused.discard(bq_field.name)
             continue
 
         # Otherwise, try to automatically determine the type based on the
