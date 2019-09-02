@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_orc
 
 
-def test_load_table_from_uri_orc(capsys, client):
+def test_load_table_from_uri_orc(capsys, client, random_table_id):
 
+    load_table_from_uri_orc.load_table_from_uri_orc(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
