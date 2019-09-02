@@ -16,7 +16,8 @@
 from .. import load_table_from_uri_parquet
 
 
-def test_load_table_from_uri_parquet(capsys, client):
+def test_load_table_from_uri_parquet(capsys, client, random_table_id):
 
+    load_table_from_uri_parquet.load_table_from_uri_parquet(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    assert "Loaded 50 rows." in out
