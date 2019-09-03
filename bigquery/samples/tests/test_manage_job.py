@@ -13,10 +13,21 @@
 # limitations under the License.
 
 
-from .. import manage_job
+from .. import create_job
+from .. import get_job
+from .. import cancel_job
 
 
 def test_manage_job(capsys, client):
 
+    job = create_job.create_job(client)
     out, err = capsys.readouterr()
-    assert 
+    assert "Started job: {}".format(job.job_id) in out
+
+    get_job.get_job(client, job.job_id, job.location)
+    out, err = capsys.readouterr()
+    assert "Details for job {} running in {}:".format(job.job_id, job.location) in out
+
+    cancel_job.cancel_job(client, job.job_id, job.location)
+    out, err = capsys.readouterr()
+    assert "Job: {} - canceled".format(job.job_id) in out
