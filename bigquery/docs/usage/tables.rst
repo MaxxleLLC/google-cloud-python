@@ -269,6 +269,35 @@ Add an empty column to the existing table with the
    :start-after: [START bigquery_add_empty_column]
    :end-before: [END bigquery_add_empty_column]
 
+Manage Table labels
+^^^^^^^^^^^^^^^^^^^^^
+
+Add labels to a table with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/label_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_label_table]
+   :end-before: [END bigquery_label_table]
+
+Get table's labels with the
+:func:`~google.cloud.bigquery.client.Client.get_table` method:
+
+.. literalinclude:: ../samples/get_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_get_table_labels]
+   :end-before: [END bigquery_get_table_labels]
+   
+Delete table's labels with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/delete_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_delete_label_table]
+   :end-before: [END bigquery_delete_label_table]
 Copying a Table
 ^^^^^^^^^^^^^^^
 
