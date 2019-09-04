@@ -269,6 +269,35 @@ Add an empty column to the existing table with the
    :start-after: [START bigquery_add_empty_column]
    :end-before: [END bigquery_add_empty_column]
 
+Manage Table labels
+^^^^^^^^^^^^^^^^^^^^^
+
+Add labels to a table with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/label_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_label_table]
+   :end-before: [END bigquery_label_table]
+
+Get table's labels with the
+:func:`~google.cloud.bigquery.client.Client.get_table` method:
+
+.. literalinclude:: ../samples/get_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_get_table_labels]
+   :end-before: [END bigquery_get_table_labels]
+   
+Delete table's labels with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/delete_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_delete_label_table]
+   :end-before: [END bigquery_delete_label_table]
 Copying a Table
 ^^^^^^^^^^^^^^^
 
@@ -328,192 +357,3 @@ Delete a table with the
    :dedent: 4
    :start-after: [START bigquery_delete_table]
    :end-before: [END bigquery_delete_table]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/client_list_jobs.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_list_jobs]
-   :end-before: [END bigquery_list_jobs]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/client_query.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query]
-   :end-before: [END bigquery_query]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/client_query_destination_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_destination_table]
-   :end-before: [END bigquery_query_destination_table]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/client_query_dry_run.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_dry_run]
-   :end-before: [END bigquery_query_dry_run]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/create_client_default_credentials.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_client_default_credentials]
-   :end-before: [END bigquery_client_default_credentials]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/extract_table_compressed.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_extract_table_compressed]
-   :end-before: [END bigquery_extract_table_compressed]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/list_rows_as_dataframe.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_list_rows_dataframe]
-   :end-before: [END bigquery_list_rows_dataframe]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/load_table_from_uri_orc.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_load_table_gcs_orc]
-   :end-before: [END bigquery_load_table_gcs_orc]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/load_table_from_uri_truncate.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_load_table_gcs_orc_truncate]
-   :end-before: [END bigquery_load_table_gcs_orc_truncate]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/manage_job.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_get_job]
-   :end-before: [END bigquery_get_job]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/manage_table_labels.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_delete_label_table]
-   :end-before: [END bigquery_delete_label_table]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/manage_views.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_grant_view_access]
-   :end-before: [END bigquery_grant_view_access]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_external_gcs_permanent_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_external_gcs_perm]
-   :end-before: [END bigquery_query_external_gcs_perm]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_external_gcs_temporary_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_external_gcs_temp]
-   :end-before: [END bigquery_query_external_gcs_temp]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_external_sheets_permanent_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_external_sheets_perm]
-   :end-before: [END bigquery_query_external_sheets_perm]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_external_sheets_temporary_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_auth_drive_scope]
-   :end-before: [END bigquery_auth_drive_scope]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_no_cache.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_no_cache]
-   :end-before: [END bigquery_query_no_cache]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/query_results_as_dataframe.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_results_dataframe]
-   :end-before: [END bigquery_query_results_dataframe]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/undelete_table.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_undelete_table]
-   :end-before: [END bigquery_undelete_table]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/update_table_cmek.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_update_table_cmek]
-   :end-before: [END bigquery_update_table_cmek]
-
-[-REPLACE_COMMENT-]
-:func:`~google.cloud.bigquery.[-REPLACE_METHOD-]` method:
-
-.. literalinclude:: ../samples/update_table_expiration.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_update_table_expiration]
-   :end-before: [END bigquery_update_table_expiration]
