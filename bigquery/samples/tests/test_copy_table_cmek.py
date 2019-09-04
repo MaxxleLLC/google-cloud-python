@@ -13,9 +13,12 @@
 # limitations under the License.
 
 
+import pytest
+
 from .. import copy_table_cmek
 
 
+@pytest.mark.skip(reason="Backend responds with a 500 internal error.")
 def test_copy_table_cmek(capsys, client, dataset_id, table_with_data_id):
 
     copy_table_cmek.copy_table_cmek(client, dataset_id, table_with_data_id)
