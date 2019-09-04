@@ -31,3 +31,4 @@ def label_dataset(client, dataset_id):
 
     print("Labels added to {}".format(dataset_id))
     # [END bigquery_label_dataset]
+    return dataset

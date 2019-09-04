@@ -20,13 +20,14 @@ from .. import label_dataset
 
 def test_dataset_label_samples(capsys, client, dataset_id):
 
-    label_dataset.label_dataset(client, dataset_id)
+    dataset = label_dataset.label_dataset(client, dataset_id)
     out, err = capsys.readouterr()
     assert "Labels added to {}".format(dataset_id) in out
+    assert dataset.labels.get("color") == "green"
 
     get_dataset_labels.get_dataset_labels(client, dataset_id)
     out, err = capsys.readouterr()
-    assert "color: green" in out
+    assert "Labels:\n\tcolor: green" in out
 
     dataset = delete_dataset_labels.delete_dataset_labels(client, dataset_id)
     out, err = capsys.readouterr()
