@@ -16,12 +16,13 @@
 def ddl_create_view(client, table_id):
 
     # [START bigquery_ddl_create_view]
+    # TODO(developer): Import the client library.
     # from google.cloud import bigquery
 
     # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
-    # TODO(developer): Set table_id to the ID of the table to create
+    # TODO(developer): Set table_id to the ID of the destination table.
     # table_id = "your-project.your_dataset.your_table_name"
 
     try:
