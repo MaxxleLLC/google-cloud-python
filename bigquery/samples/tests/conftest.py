@@ -16,6 +16,7 @@ import datetime
 import uuid
 
 import pytest
+import six
 
 from google.cloud import bigquery
 from google.cloud import bigquery_v2
@@ -91,6 +92,19 @@ def table_id(client, dataset_id):
 @pytest.fixture
 def table_with_data_id(client):
     return "bigquery-public-data.samples.shakespeare"
+
+
+@pytest.fixture
+def table_truncation_id(client, random_table_id):
+    job_config = bigquery.LoadJobConfig()
+    job_config.schema = [
+        bigquery.SchemaField("name", "STRING"),
+        bigquery.SchemaField("post_abbr", "STRING"),
+    ]
+    body = six.BytesIO(b"Washington,WA")
+    client.load_table_from_file(body, random_table_id, job_config=job_config).result()
+    yield random_table_id
+    client.delete_table(random_table_id, not_found_ok=True)
 
 
 @pytest.fixture

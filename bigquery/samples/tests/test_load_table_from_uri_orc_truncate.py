@@ -13,26 +13,16 @@
 # limitations under the License.
 
 
-import six
-from google.cloud import bigquery
-
 from .. import load_table_from_uri_orc_truncate
 
 
-def test_load_table_from_uri_orc_truncate(capsys, client, random_table_id):
+def test_load_table_from_uri_orc_truncate(capsys, client, table_truncation_id):
 
-    job_config = bigquery.LoadJobConfig()
-    job_config.schema = [
-        bigquery.SchemaField("name", "STRING"),
-        bigquery.SchemaField("post_abbr", "STRING"),
-    ]
-    body = six.BytesIO(b"Washington,WA")
-    client.load_table_from_file(body, random_table_id, job_config=job_config).result()
-    previous_rows = client.get_table(random_table_id).num_rows
+    previous_rows = client.get_table(table_truncation_id).num_rows
     assert previous_rows > 0
 
     load_table_from_uri_orc_truncate.load_table_from_uri_orc_truncate(
-        client, random_table_id
+        client, table_truncation_id
     )
     out, err = capsys.readouterr()
     assert "Loaded 50 rows." in out
