@@ -13,27 +13,20 @@
 # limitations under the License.
 
 
-def undelete_table(client, to_delete):
+def undelete_table(client, table_id):
 
     # [START bigquery_undelete_table]
-    dataset_id = "undelete_table_dataset_{}".format(_millis())
-    table_id = "undelete_table_table_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    dataset.location = "US"
-    dataset = client.create_dataset(dataset)
-    to_delete.append(dataset)
-
-    table = bigquery.Table(dataset.table(table_id), schema=SCHEMA)
-    client.create_table(table)
-
-    # TODO(developer): Uncomment the lines below and replace with your values.
-    # import time
+    # TODO(developer): Import the client library.
     # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # dataset_id = 'my_dataset'  # Replace with your dataset ID.
-    # table_id = 'my_table'      # Replace with your table ID.
 
-    table_ref = client.dataset(dataset_id).table(table_id)
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the model to fetch.
+    # table_id = 'your-project.your_dataset.your_table'
+
+    import time
+    from google.api_core import datetime_helpers
 
     # TODO(developer): Choose an appropriate snapshot point as epoch
     # milliseconds. For this example, we choose the current time as we're about
@@ -42,36 +35,34 @@ def undelete_table(client, to_delete):
 
     # Due to very short lifecycle of the table, ensure we're not picking a time
     # prior to the table creation due to time drift between backend and client.
-    table = client.get_table(table_ref)
+    table = client.get_table(table_id)
     created_epoch = datetime_helpers.to_microseconds(table.created)
     if created_epoch > snapshot_epoch:
         snapshot_epoch = created_epoch
 
-    # [START bigquery_undelete_table]
-
     # "Accidentally" delete the table.
-    client.delete_table(table_ref)  # API request
+    client.delete_table(table_id)
 
     # Construct the restore-from table ID using a snapshot decorator.
-    snapshot_table_id = "{}@{}".format(table_id, snapshot_epoch)
-    source_table_ref = client.dataset(dataset_id).table(snapshot_table_id)
+    snapshot_table_id = "{}@{}".format(table.table_id, snapshot_epoch)
+    snapshot_table = client.dataset(table.dataset_id).table(snapshot_table_id)
 
     # Choose a new table ID for the recovered table data.
-    recovered_table_id = "{}_recovered".format(table_id)
-    dest_table_ref = client.dataset(dataset_id).table(recovered_table_id)
+    recovered_table_id = "{}_recovered".format(table.table_id)
+    recovered_table = client.dataset(table.dataset_id).table(recovered_table_id)
 
     # Construct and run a copy job.
     job = client.copy_table(
-        source_table_ref,
-        dest_table_ref,
+        snapshot_table,
+        recovered_table,
         # Location must match that of the source and destination tables.
         location="US",
-    )  # API request
-
-    job.result()  # Waits for job to complete.
+    )
+    job.result()
 
     print(
-        "Copied data from deleted table {} to {}".format(table_id, recovered_table_id)
+        "Copied data from deleted table {} to {}".format(
+            snapshot_table_id, recovered_table_id
+        )
     )
-
     # [END bigquery_undelete_table]

@@ -13,15 +13,23 @@
 # limitations under the License.
 
 
+from google.cloud import bigquery
+
 from .. import undelete_table
 
 
-def test_undelete_table(capsys, client):
+def test_undelete_table(capsys, client, random_table_id):
 
     schema = [
         bigquery.SchemaField("full_name", "STRING", mode="REQUIRED"),
         bigquery.SchemaField("age", "INTEGER", mode="REQUIRED"),
     ]
 
+    table = bigquery.Table(random_table_id, schema=schema)
+    client.create_table(table)
+
+    undelete_table.undelete_table(client, random_table_id)
     out, err = capsys.readouterr()
-    assert 
+    # assert "{}".format(table.table_id + "_recovered") in out
+    print(out)
+    raise ValueError
