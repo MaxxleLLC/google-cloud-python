@@ -1,9 +1,9 @@
 Creating a Client
 ~~~~~~~~~~~~~~~~~
 
-A project is the top-level container in the ``BigQuery`` API:  it is tied
+A project is the top-level container in the ``BigQuery`` API: it is tied
 closely to billing, and can provide default access control across all its
-datasets.  If no ``project`` is passed to the client container, the library
+datasets. If no ``project`` is passed to the client container, the library
 attempts to infer a project using the environment (including explicit
 environment variables, GAE, and GCE).
 
@@ -13,16 +13,16 @@ or to either of the alternative ``classmethod`` factories:
 
 .. code-block:: python
 
-   from google.cloud import bigquery
-   client = bigquery.Client(project='PROJECT_ID')
+    from google.cloud import bigquery
+    client = bigquery.Client(project='PROJECT_ID')
 
 Create a BigQuery client with Application Default Credentials.
 
-.. literalinclude:: ../samples/create_client_default_credentials.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_client_default_credentials]
-   :end-before: [END bigquery_client_default_credentials]
+.. literalinclude:: ../../samples/create_client_default_credentials.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_client_default_credentials]
+    :end-before: [END bigquery_client_default_credentials]
 
 
 Project ACLs

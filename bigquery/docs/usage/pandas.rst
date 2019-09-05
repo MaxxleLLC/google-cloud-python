@@ -12,30 +12,30 @@ First, ensure that the :mod:`pandas` library is installed by running:
 
 .. code-block:: bash
 
-   pip install --upgrade pandas
+    pip install --upgrade pandas
 
 Alternatively, you can install the BigQuery python client library with
 :mod:`pandas` by running:
 
 .. code-block:: bash
 
-   pip install --upgrade google-cloud-bigquery[pandas]
+    pip install --upgrade google-cloud-bigquery[pandas]
 
 To retrieve query results as a :class:`pandas.DataFrame`:
 
 .. literalinclude:: ../snippets.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_query_results_dataframe]
-   :end-before: [END bigquery_query_results_dataframe]
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_query_results_dataframe]
+    :end-before: [END bigquery_query_results_dataframe]
 
 To retrieve table rows as a :class:`pandas.DataFrame`:
 
-.. literalinclude:: ../samples/list_rows_as_dataframe.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_list_rows_dataframe]
-   :end-before: [END bigquery_list_rows_dataframe]
+.. literalinclude:: ../../samples/list_rows_as_dataframe.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_list_rows_dataframe]
+    :end-before: [END bigquery_list_rows_dataframe]
 
 Load a Pandas DataFrame to a BigQuery Table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -50,13 +50,13 @@ install the BigQuery python client library with :mod:`pandas` and
 
 .. code-block:: bash
 
-   pip install --upgrade google-cloud-bigquery[pandas,pyarrow]
+    pip install --upgrade google-cloud-bigquery[pandas,pyarrow]
 
 The following example demonstrates how to create a :class:`pandas.DataFrame`
 and load it into a new table:
 
-.. literalinclude:: ../samples/load_table_dataframe.py
-   :language: python
-   :dedent: 4
-   :start-after: [START bigquery_load_table_dataframe]
-   :end-before: [END bigquery_load_table_dataframe]
+.. literalinclude:: ../../samples/load_table_dataframe.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_load_table_dataframe]
+    :end-before: [END bigquery_load_table_dataframe]
