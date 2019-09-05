@@ -402,7 +402,7 @@ Delete a table with the
 Recovering Table
 ^^^^^^^^^^^^^^^^
 
-Recover a table with the
+Recover a table after "accidental" deletion with the
 :func:`~google.cloud.bigquery.client.Client.copy_table` method:
 
 .. literalinclude:: ../../samples/undelete_table.py
