@@ -27,7 +27,7 @@ def client():
 
 
 @pytest.fixture
-def random_table_id(client, dataset_id):
+def random_table_id(dataset_id):
     now = datetime.datetime.now()
     random_table_id = "example_table_{}_{}".format(
         now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
@@ -46,7 +46,7 @@ def random_dataset_id(client):
 
 
 @pytest.fixture
-def random_routine_id(client, dataset_id):
+def random_routine_id(dataset_id):
     now = datetime.datetime.now()
     random_routine_id = "example_routine_{}_{}".format(
         now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
@@ -79,7 +79,7 @@ def table_id(client, dataset_id):
 
 
 @pytest.fixture
-def table_with_data_id(client):
+def table_with_data_id():
     return "bigquery-public-data.samples.shakespeare"
 
 
