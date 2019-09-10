@@ -65,7 +65,7 @@ def load_table_dataframe(client, table_id):
         job_config=job_config,
         location="US",  # Must match the destination dataset location.
     )  # API request.
-    job.result()  # Waits for job to complete.
+    job.result()  # Waits for the job to complete.
 
     table = client.get_table(table_id)  # API request.
     print(
