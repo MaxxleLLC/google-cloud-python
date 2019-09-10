@@ -14,6 +14,7 @@
 
 
 def load_table_dataframe(client, table_id):
+
     # [START bigquery_load_table_dataframe]
     from google.cloud import bigquery
 
