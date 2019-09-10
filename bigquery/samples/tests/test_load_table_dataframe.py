@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import pytest
 
 from .. import load_table_dataframe
 
 
-pytest.importorskip("pandas")
-pytest.importorskip("pyarrow")
+pandas = pytest.importorskip("pandas")
+pyarrow = pytest.importorskip("pyarrow")
 
 
 def test_load_table_dataframe(capsys, client, random_table_id):
