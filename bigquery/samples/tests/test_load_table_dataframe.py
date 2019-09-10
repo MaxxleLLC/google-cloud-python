@@ -23,6 +23,7 @@ pyarrow = pytest.importorskip("pyarrow")
 
 
 def test_load_table_dataframe(capsys, client, random_table_id):
+
     table = load_table_dataframe.load_table_dataframe(client, random_table_id)
     out, _ = capsys.readouterr()
     assert "Loaded 4 rows and 3 columns" in out
