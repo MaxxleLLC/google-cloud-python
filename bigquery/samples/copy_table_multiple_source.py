@@ -31,17 +31,16 @@ def copy_table_multiple_source(client, dataset_id, tables_ids):
     dataset = client.get_dataset(dataset_id)
     orig_tables = []
     for table_id in tables_ids:
-        orig_tables.append(client.get_table(table_id))
+        orig_tables.append(client.get_table(table_id))  # API request.
     dest_table = dataset.table("destination_table")
     job = client.copy_table(
         orig_tables,
         dest_table,
-        # Location must match that of the source and destination tables.
-        location="US",
-    )
-    job.result()
+        location="US",  # Must match the source and destination tables location.
+    )  # API request.
+    job.result()  # Waits for job to complete.
 
-    dest_table = client.get_table(dest_table)
+    dest_table = client.get_table(dest_table)  # API request.
     if dest_table.num_rows == 2:
         print("A copy of {} tables created".format(len(tables_ids)))
     # [END bigquery_copy_table_multiple_source]

@@ -26,7 +26,7 @@ def client_query_destination_table(client, table_id):
 
     job_config = bigquery.QueryJobConfig()
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     job_config.destination = table
     sql = """
         SELECT corpus
@@ -37,12 +37,10 @@ def client_query_destination_table(client, table_id):
     # Start the query, passing in the extra configuration.
     query_job = client.query(
         sql,
-        # Location must match that of the dataset(s) referenced in the query
-        # and of the destination table.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
-    query_job.result()
+    )  # API request.
+    query_job.result()  # Waits for job to complete.
 
     print("Query results loaded to the table {}".format(table_id))
     # [END bigquery_query_destination_table]

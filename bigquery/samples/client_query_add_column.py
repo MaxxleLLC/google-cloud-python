@@ -34,7 +34,7 @@ def client_query_add_column(client, dataset_id):
     table = client.create_table(bigquery.Table(table_id, schema=schema))
 
     # Retrieves the destination table and checks the length of the schema.
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     if len(table.schema) == 2:
         print(
             "Table {} contains {} columns".format(table_id.table_id, len(table.schema))
@@ -48,20 +48,20 @@ def client_query_add_column(client, dataset_id):
     ]
     job_config.destination = table_id
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         # In this example, the existing table contains only the 'full_name' and
         # 'age' columns, while the results of this query will contain an
         # additional 'favorite_color' column.
         'SELECT "Timmy" as full_name, 85 as age, "Blue" as favorite_color;',
-        # Location must match that of the dataset(s) referenced in the query
-        # and of the destination table.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
-    query_job.result()
+    )  # API request.
+    query_job.result()  # Waits for job to complete.
 
     # Checks the updated length of the schema.
-    table = client.get_table(table)
+    table = client.get_table(table_id)  # API request.
     if len(table.schema) == 3 and table.num_rows > 0:
         print(
             "Table {} now contains {} columns".format(

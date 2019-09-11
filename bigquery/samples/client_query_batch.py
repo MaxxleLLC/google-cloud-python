@@ -22,6 +22,7 @@ def client_query_batch(client):
     # client = bigquery.Client()
 
     job_config = bigquery.QueryJobConfig()
+
     # Run at batch priority, which won't count toward concurrent rate limit.
     job_config.priority = bigquery.QueryPriority.BATCH
     sql = """
@@ -30,11 +31,12 @@ def client_query_batch(client):
         GROUP BY corpus;
     """
 
-    query_job = client.query(sql, location="US", job_config=job_config)
+    # Start the query, passing in the extra configuration.
+    query_job = client.query(sql, location="US", job_config=job_config)  # API request.
 
     # Check on the progress by getting the job's updated state. Once the state
     # is `DONE`, the results are ready.
-    query_job = client.get_job(query_job.job_id, location="US")
+    query_job = client.get_job(query_job.job_id, location="US")  # API request.
 
     print("Job {} is currently in state {}".format(query_job.job_id, query_job.state))
     # [END bigquery_query_batch]
