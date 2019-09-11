@@ -36,15 +36,16 @@ def load_table_from_uri_cmek(client, table_id):
     encryption_config = bigquery.EncryptionConfiguration(kms_key_name=kms_key_name)
     job_config.destination_encryption_configuration = encryption_config
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+
     load_job = client.load_table_from_uri(
         uri,
         table_id,
-        location="US",  # Location must match that of the destination dataset.
+        location="US",  # Must match the destination dataset location.
         job_config=job_config,
-    )
-    load_job.result()
+    )  # API request.
+    load_job.result()  # Waits for job to complete.
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     if table.encryption_configuration.kms_key_name == kms_key_name:
         print("Table {} loaded.".format(table_id))
     # [END bigquery_load_table_gcs_json_cmek]

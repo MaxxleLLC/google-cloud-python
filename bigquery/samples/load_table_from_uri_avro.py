@@ -27,9 +27,12 @@ def load_table_from_uri_avro(client, table_id):
     job_config = bigquery.LoadJobConfig()
     job_config.source_format = bigquery.SourceFormat.AVRO
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states.avro"
-    load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
-    load_job.result()
 
-    destination_table = client.get_table(table_id)
+    load_job = client.load_table_from_uri(
+        uri, table_id, job_config=job_config
+    )  # API request.
+    load_job.result()  # Waits for job to complete.
+
+    destination_table = client.get_table(table_id)  # API request.
     print("Loaded {} rows.".format(destination_table.num_rows))
     # [END bigquery_load_table_gcs_avro]
