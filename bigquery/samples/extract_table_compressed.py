@@ -13,20 +13,19 @@
 # limitations under the License.
 
 
-from test_utils.retry import RetryErrors
-from google.api_core.exceptions import InternalServerError
-from google.api_core.exceptions import ServiceUnavailable
-from google.api_core.exceptions import TooManyRequests
-
-retry_storage_errors = RetryErrors(
-    (TooManyRequests, InternalServerError, ServiceUnavailable)
-)
-
-
 def extract_table_compressed(client, bucket, table_id):
 
     # [START bigquery_extract_table_compressed]
     from google.cloud import bigquery
+
+    from test_utils.retry import RetryErrors
+    from google.api_core.exceptions import InternalServerError
+    from google.api_core.exceptions import ServiceUnavailable
+    from google.api_core.exceptions import TooManyRequests
+
+    retry_storage_errors = RetryErrors(
+        (TooManyRequests, InternalServerError, ServiceUnavailable)
+    )
 
     # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
@@ -45,18 +44,17 @@ def extract_table_compressed(client, bucket, table_id):
     # table_id = 'your-project.your_dataset.your_table'
 
     destination_uri = "gs://{}/{}".format(bucket.name, "shakespeare.csv.gz")
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
 
     job_config = bigquery.job.ExtractJobConfig()
     job_config.compression = bigquery.Compression.GZIP
     extract_job = client.extract_table(
         table,
         destination_uri,
-        # Location must match that of the source table.
-        location="US",
+        location="US",  # Must match the source table location.
         job_config=job_config,
     )
-    extract_job.result()
+    extract_job.result()  # Waits for job to complete.
 
     blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv.gz")
     if blob.exists and blob.size > 0:

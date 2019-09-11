@@ -25,11 +25,11 @@ def list_rows_as_dataframe(client, table_id):
     # TODO(developer): Set table_id to the ID of the table to fetch.
     # table_id = 'your-project.your_dataset.your_table'
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
 
-    df = client.list_rows(table).to_dataframe()
+    df = client.list_rows(table_id).to_dataframe()  # API request.
 
-    # verify the number of rows and columns
+    # Verify the number of rows and columns.
     if len(list(df)) == len(table.schema) and len(df) == table.num_rows:
         print('Retrieved table {} rows as a "pandas.DataFrame"'.format(table_id))
     # [END bigquery_list_rows_dataframe]
