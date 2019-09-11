@@ -25,11 +25,6 @@ def ddl_create_view(client, table_id):
     # TODO(developer): Set table_id to the ID of the destination table.
     # table_id = "your-project.your_dataset.your_table_name"
 
-    try:
-        import pandas
-    except (ImportError, AttributeError):
-        pandas = None
-
     sql = """
     CREATE VIEW `{}`
     OPTIONS(
@@ -46,15 +41,15 @@ def ddl_create_view(client, table_id):
         table_id
     )
     job = client.query(sql)
-    job.result()
+    job.result()  # Waits for job to complete.
 
     # Test that listing query result rows succeeds so that generic query
     # processing tools work with DDL statements.
-    rows = list(job)
-    if pandas is not None:
-        df = job.to_dataframe()
-        if len(df) == 0 and len(rows) == 0:
-            print('Created new view "{}".'.format(table_id))
-    elif len(rows) == 0:
-        print('Created new view "{}".'.format(table_id))
+    print(
+        'Created new view "{}.{}.{}".'.format(
+            job.destination.project,
+            job.destination.dataset_id,
+            job.destination.table_id,
+        )
+    )
     # [END bigquery_ddl_create_view]

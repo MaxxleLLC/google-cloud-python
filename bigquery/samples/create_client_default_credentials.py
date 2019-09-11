@@ -16,8 +16,6 @@
 def create_client_default_credentials():
 
     # [START bigquery_client_default_credentials]
-    """Create a BigQuery client with Application Default Credentials"""
-
     from google.cloud import bigquery
 
     # If you don't specify credentials when constructing the client, the

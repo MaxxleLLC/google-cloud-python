@@ -36,7 +36,7 @@ def create_partitioned_table(client, table_id):
         field="date",  # name of column to use for partitioning
         expiration_ms=7776000000,  # 90 days
     )
-    table = client.create_table(table)
+    table = client.create_table(table)  # API request.
     if (
         table.time_partitioning.type_ == "DAY"
         and table.time_partitioning.field == "date"

@@ -44,9 +44,9 @@ def create_table_nested_repeated_schema(client, table_id):
         ),
     ]
     table = bigquery.Table(table_id, schema=schema)
-    table = client.create_table(table)
+    table = client.create_table(table)  # API request.
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     if table.schema == schema:
         print("Created table {}".format(table_id))
     # [END bigquery_nested_repeated_schema]

@@ -34,9 +34,9 @@ def create_table_cmek(client, table_id):
     table.encryption_configuration = bigquery.EncryptionConfiguration(
         kms_key_name=kms_key_name
     )
-    table = client.create_table(table)
-    table = client.get_table(table_id)
+    table = client.create_table(table)  # API request.
 
+    table = client.get_table(table_id)  # API request.
     if table.encryption_configuration.kms_key_name == kms_key_name:
         print("Created table {}".format(table_id))
     # [END bigquery_create_table_cmek]
