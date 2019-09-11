@@ -34,16 +34,16 @@ def client_query_destination_table_cmek(client, table_id):
     )
     encryption_config = bigquery.EncryptionConfiguration(kms_key_name=kms_key_name)
     job_config.destination_encryption_configuration = encryption_config
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         "SELECT 17 AS my_col;",
-        # Location must match that of the dataset(s) referenced in the query
-        # and of the destination table.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
-    query_job.result()
+    )  # API request.
+    query_job.result()  # Waits for job to complete.
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     if table.encryption_configuration.kms_key_name == kms_key_name:
         print("The destination table is written using the encryption configuration")
     # [END bigquery_query_destination_table_cmek]

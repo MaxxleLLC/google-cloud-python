@@ -30,12 +30,13 @@ def client_query_legacy_sql(client):
     # Set use_legacy_sql to True to use legacy SQL syntax.
     job_config = bigquery.QueryJobConfig()
     job_config.use_legacy_sql = True
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         query,
-        # Location must match that of the dataset(s) referenced in the query.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
+    )  # API request.
 
     print("The query data:")
     for row in query_job:

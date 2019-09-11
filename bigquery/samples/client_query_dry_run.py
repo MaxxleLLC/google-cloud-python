@@ -24,6 +24,8 @@ def client_query_dry_run(client):
     job_config = bigquery.QueryJobConfig()
     job_config.dry_run = True
     job_config.use_query_cache = False
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         (
             "SELECT name, COUNT(*) as name_count "
@@ -31,10 +33,9 @@ def client_query_dry_run(client):
             "WHERE state = 'WA' "
             "GROUP BY name"
         ),
-        # Location must match that of the dataset(s) referenced in the query.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
+    )  # API request.
 
     # A dry run query completes immediately.
     if query_job.dry_run and query_job.total_bytes_processed > 0:

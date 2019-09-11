@@ -30,7 +30,7 @@ def client_query_destination_table_legacy(client, table_id):
     job_config.use_legacy_sql = True
 
     # Set the destination table
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     job_config.destination = table
     job_config.allow_large_results = True
     sql = """
@@ -38,14 +38,14 @@ def client_query_destination_table_legacy(client, table_id):
         FROM [bigquery-public-data:samples.shakespeare]
         GROUP BY corpus;
     """
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         sql,
-        # Location must match that of the dataset(s) referenced in the query
-        # and of the destination table.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
-    query_job.result()
+    )  # API request.
+    query_job.result()  # Waits for job to complete.
 
     print("Query results loaded to the table {}".format(table_id))
     # [END bigquery_query_legacy_large_results]

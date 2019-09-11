@@ -44,19 +44,19 @@ def client_query_relax_column(client, table_id):
     ]
     job_config.destination = table
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         # In this example, the existing table contains 'full_name' and 'age' as
         # required columns, but the query results will omit the second column.
         'SELECT "Beyonce" as full_name;',
-        # Location must match that of the dataset(s) referenced in the query
-        # and of the destination table.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
-    query_job.result()
+    )  # API request.
+    query_job.result()  # Waits for job to complete.
 
     # Checks the updated number of required fields
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     current_required_fields = sum(field.mode == "REQUIRED" for field in table.schema)
     if (
         original_required_fields - current_required_fields > 0
