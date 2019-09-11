@@ -27,11 +27,9 @@ def client_query_total_rows(client):
         "LIMIT 100"
     )
     query_job = client.query(
-        query,
-        # Location must match that of the dataset(s) referenced in the query.
-        location="US",
-    )
-    results = query_job.result()
+        query, location="US"  # Must match the destination dataset(s) location.
+    )  # API request.
+    results = query_job.result()  # Waits for job to complete.
 
     print("Got {} rows.".format(results.total_rows))
     # [END bigquery_query_total_rows]

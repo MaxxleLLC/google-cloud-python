@@ -18,11 +18,11 @@ def client_query_w_timestamp_params(client):
     # [START bigquery_query_params_timestamps]
     from google.cloud import bigquery
 
-    # TODO(developer): Construct a BigQuery client object.
-    # client = bigquery.Client()
-
     import datetime
     import pytz
+
+    # TODO(developer): Construct a BigQuery client object.
+    # client = bigquery.Client()
 
     query = "SELECT TIMESTAMP_ADD(@ts_value, INTERVAL 1 HOUR);"
     query_params = [
@@ -34,12 +34,13 @@ def client_query_w_timestamp_params(client):
     ]
     job_config = bigquery.QueryJobConfig()
     job_config.query_parameters = query_params
+
+    # Start the query, passing in the extra configuration.
     query_job = client.query(
         query,
-        # Location must match that of the dataset(s) referenced in the query.
-        location="US",
+        location="US",  # Must match the destination dataset(s) location.
         job_config=job_config,
-    )
+    )  # API request.
 
     for row in query_job:
         print(row)
