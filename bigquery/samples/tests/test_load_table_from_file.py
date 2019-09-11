@@ -13,11 +13,16 @@
 # limitations under the License.
 
 
+import os
+
 from .. import load_table_from_file
 
 
 def test_load_table_from_file(capsys, client, random_table_id):
 
-    load_table_from_file.load_table_from_file(client, random_table_id)
+    samples_dir = os.path.abspath(os.path.dirname(__file__))
+    filepath = os.path.join(samples_dir, "data", "people.csv")
+
+    load_table_from_file.load_table_from_file(client, random_table_id, filepath)
     out, err = capsys.readouterr()
     assert "Loaded 2 rows into {}.".format(random_table_id) in out

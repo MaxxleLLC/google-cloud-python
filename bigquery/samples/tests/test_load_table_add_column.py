@@ -13,12 +13,17 @@
 # limitations under the License.
 
 
+import os
+
 from .. import load_table_add_column
 
 
 def test_load_table_add_column(capsys, client, random_table_id):
 
-    load_table_add_column.load_table_add_column(client, random_table_id)
+    samples_dir = os.path.abspath(os.path.dirname(__file__))
+    filepath = os.path.join(samples_dir, "data", "people.csv")
+
+    load_table_add_column.load_table_add_column(client, random_table_id, filepath)
     out, err = capsys.readouterr()
     assert "Table {} contains 1 column(s).".format(random_table_id) in out
     assert "Loaded 2 row(s) into {}.".format(random_table_id) in out

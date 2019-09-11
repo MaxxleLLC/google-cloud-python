@@ -22,6 +22,7 @@ def test_load_and_query_partitioned_table(capsys, client, random_table_id):
     load_partitioned_table.load_partitioned_table(client, random_table_id)
     out, err = capsys.readouterr()
     assert "Loaded 50 rows to table {}".format(random_table_id) in out
+
     query_partitioned_table.query_partitioned_table(client, random_table_id)
     out, err = capsys.readouterr()
     assert "29 states were admitted to the US in the 1800s" in out

@@ -38,9 +38,12 @@ def load_partitioned_table(client, table_id):
     )
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states-by-date.csv"
 
-    load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
-    load_job.result()
+    # Start the query, passing in the extra configuration.
+    load_job = client.load_table_from_uri(
+        uri, table_id, job_config=job_config
+    )  # API request.
+    load_job.result()  # Waits for job to complete.
 
-    table = client.get_table(table_id)
+    table = client.get_table(table_id)  # API request.
     print("Loaded {} rows to table {}".format(table.num_rows, table_id))
     # [END bigquery_load_table_partitioned]

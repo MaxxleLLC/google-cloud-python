@@ -18,13 +18,13 @@ def query_partitioned_table(client, table_id):
     # [START bigquery_query_partitioned_table]
     from google.cloud import bigquery
 
+    import datetime
+
     # TODO(developer): Construct a BigQuery client object.
     # client = bigquery.Client()
 
     # TODO(developer): Set table_id to the ID of the queried table.
     # table_id = 'your-project.your_dataset.your_table'
-
-    import datetime
 
     sql_template = """
         SELECT *
@@ -32,13 +32,14 @@ def query_partitioned_table(client, table_id):
         WHERE date BETWEEN @start_date AND @end_date
     """
     sql = sql_template.format(table_id)
-
     job_config = bigquery.QueryJobConfig()
     job_config.query_parameters = [
         bigquery.ScalarQueryParameter("start_date", "DATE", datetime.date(1800, 1, 1)),
         bigquery.ScalarQueryParameter("end_date", "DATE", datetime.date(1899, 12, 31)),
     ]
-    query_job = client.query(sql, job_config=job_config)
+
+    # Start the query, passing in the extra configuration.
+    query_job = client.query(sql, job_config=job_config)  # API request.
 
     rows = list(query_job)
     print("{} states were admitted to the US in the 1800s".format(len(rows)))

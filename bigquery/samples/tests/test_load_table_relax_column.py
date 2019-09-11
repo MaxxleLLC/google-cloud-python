@@ -13,12 +13,25 @@
 # limitations under the License.
 
 
+import os
+from google.cloud import bigquery
+
 from .. import load_table_relax_column
 
 
 def test_load_table_relax_column(capsys, client, random_table_id):
 
-    load_table_relax_column.load_table_relax_column(client, random_table_id)
+    old_schema = [
+        bigquery.SchemaField("full_name", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("age", "INTEGER", mode="REQUIRED"),
+        bigquery.SchemaField("favorite_color", "STRING", mode="REQUIRED"),
+    ]
+
+    client.create_table(bigquery.Table(random_table_id, schema=old_schema))
+    samples_dir = os.path.abspath(os.path.dirname(__file__))
+    filepath = os.path.join(samples_dir, "data", "people.csv")
+
+    load_table_relax_column.load_table_relax_column(client, random_table_id, filepath)
     out, err = capsys.readouterr()
     assert "3 fields in the schema are required." in out
     assert "Loaded 2 rows into {}.".format(random_table_id) in out

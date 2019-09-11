@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-def load_table_from_file(client, table_id):
+def load_table_from_file(client, table_id, filepath):
 
     # [START bigquery_load_from_file]
     from google.cloud import bigquery
@@ -24,10 +24,8 @@ def load_table_from_file(client, table_id):
     # TODO(developer): Set table_id to the ID of the destination table.
     # table_id = 'your-project.your_dataset.your_table'
 
-    import os
-
-    samples_dir = os.path.abspath(os.path.dirname(__file__))
-    filepath = os.path.join(samples_dir, "tests", "data", "people.csv")
+    # TODO(developer): Set pathname to your .csv source file.
+    # filepath = 'path/to/your_file.csv'
 
     job_config = bigquery.LoadJobConfig()
     job_config.source_format = bigquery.SourceFormat.CSV
@@ -35,8 +33,10 @@ def load_table_from_file(client, table_id):
     job_config.autodetect = True
 
     with open(filepath, "rb") as source_file:
-        job = client.load_table_from_file(source_file, table_id, job_config=job_config)
-    job.result()
+        job = client.load_table_from_file(
+            source_file, table_id, job_config=job_config
+        )  # API request.
+    job.result()  # Waits for job to complete.
 
     print("Loaded {} rows into {}.".format(job.output_rows, table_id))
     # [END bigquery_load_from_file]
