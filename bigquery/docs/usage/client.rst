@@ -16,6 +16,14 @@ or to either of the alternative ``classmethod`` factories:
    from google.cloud import bigquery
    client = bigquery.Client(project='PROJECT_ID')
 
+Create a BigQuery client with Application Default Credentials.
+
+.. literalinclude:: ../samples/create_client_default_credentials.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_client_default_credentials]
+   :end-before: [END bigquery_client_default_credentials]
+
 
 Project ACLs
 ^^^^^^^^^^^^
