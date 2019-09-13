@@ -1,10 +1,7 @@
 Spanner Client Enums
 =============================
 
-.. autoclass:: google.cloud.spanner_v1.gapic.enums.NullValue
-    :members:
-
-.. autoclass:: google.cloud.spanner_v1.gapic.enums.TypeCode
+.. automodule:: google.cloud.spanner_v1.gapic.enums
     :members:
 
 .. autoclass:: google.cloud.spanner_v1.gapic.enums.ExecuteSqlRequest
