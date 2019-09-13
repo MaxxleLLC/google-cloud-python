@@ -27,6 +27,7 @@ and some advanced use cases may wish to interact with these directly:
 
     gapic/v1/api
     gapic/v1/types
+    gapic/v1/enums
     gapic/v1/admin_database_api
     gapic/v1/admin_database_types
     gapic/v1/admin_instance_api
