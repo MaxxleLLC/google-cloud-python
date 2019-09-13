@@ -9,6 +9,7 @@ API Reference
 
    gapic/v1/api
    gapic/v1/types
+   gapic/v1/enums
 
 
 Changelog
