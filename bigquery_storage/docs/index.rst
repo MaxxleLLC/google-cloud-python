@@ -8,6 +8,7 @@ API Reference
     gapic/v1beta1/api
     gapic/v1beta1/reader
     gapic/v1beta1/types
+    gapic/v1beta1/enums
 
 Example Usage
 -------------
