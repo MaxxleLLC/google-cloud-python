@@ -48,7 +48,7 @@ def copy_table_cmek(client, dataset_id, table_id):
     )
     job.result()  # Waits for job to complete.
 
-    dest_table = client.get_table(table_id)  # API request.
+    dest_table = client.get_table(dest_table)  # API request.
     if dest_table.encryption_configuration.kms_key_name == kms_key_name:
         print("A copy of the table created")
     # [END bigquery_copy_table_cmek]
