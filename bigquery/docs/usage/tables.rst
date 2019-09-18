@@ -269,6 +269,45 @@ Add an empty column to the existing table with the
    :start-after: [START bigquery_add_empty_column]
    :end-before: [END bigquery_add_empty_column]
 
+Manage Table view
+^^^^^^^^^^^^^^^^^
+
+Create a shared view of a source table with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../../samples/create_view.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_create_view]
+    :end-before: [END bigquery_create_view]
+
+Update a shared view of a source table with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../../samples/update_view_query.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_update_view_query]
+    :end-before: [END bigquery_update_view_query]
+
+Get a view resource with the
+:func:`~google.cloud.bigquery.client.Client.get_table` method:
+
+.. literalinclude:: ../../samples/get_view.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_get_view]
+    :end-before: [END bigquery_get_view]
+
+Set a view's access permissions with the
+:func:`~google.cloud.bigquery.client.Client.update_dataset` method:
+
+.. literalinclude:: ../../samples/grant_view_access.py
+    :language: python
+    :dedent: 4
+    :start-after: [START bigquery_grant_view_access]
+    :end-before: [END bigquery_grant_view_access]
+
 Copying a Table
 ^^^^^^^^^^^^^^^
 
