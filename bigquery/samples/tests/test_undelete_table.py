@@ -13,12 +13,21 @@
 # limitations under the License.
 
 
-from .. import create_job
+from google.cloud import bigquery
+
+from .. import undelete_table
 
 
-def test_create_job(capsys, client):
+def test_undelete_table(capsys, client, random_table_id):
 
-    query_job = create_job.create_job(client)
-    client.cancel_job(query_job.job_id, location="US")
+    schema = [
+        bigquery.SchemaField("full_name", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("age", "INTEGER", mode="REQUIRED"),
+    ]
+
+    table = bigquery.Table(random_table_id, schema=schema)
+    client.create_table(table)
+
+    undelete_table.undelete_table(client, random_table_id)
     out, err = capsys.readouterr()
-    assert "Started job: {}".format(query_job.job_id) in out
+    assert "{}".format(table.table_id + "_recovered") in out
