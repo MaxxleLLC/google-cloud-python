@@ -589,6 +589,61 @@ class Test_Bucket(unittest.TestCase):
         self.assertEqual(kw["data"], DATA)
         self.assertEqual(bucket.location, LOCATION)
 
+    def test_create_w_acl_property(self):
+        PROJECT = "PROJECT"
+        BUCKET_NAME = "bucket-name"
+        DATA = {"name": BUCKET_NAME}
+        connection = _Connection(DATA)
+        client = _Client(connection, project=PROJECT)
+        bucket = self._make_one(client=client, name=BUCKET_NAME)
+        bucket.create(predefined_acl="private")
+
+        kw, = connection._requested
+        self.assertEqual(kw["method"], "POST")
+        self.assertEqual(kw["path"], "/b")
+        self.assertEqual(
+            kw["query_params"], {"project": PROJECT, "predefinedAcl": "private"}
+        )
+        self.assertEqual(kw["data"], DATA)
+
+    def test_create_w__invalid_acl_property(self):
+        PROJECT = "PROJECT"
+        BUCKET_NAME = "bucket-name"
+        DATA = {"name": BUCKET_NAME}
+        connection = _Connection(DATA)
+        client = _Client(connection, project=PROJECT)
+        bucket = self._make_one(client=client, name=BUCKET_NAME)
+        with self.assertRaises(ValueError):
+            bucket.create(predefined_acl="fake")
+
+    def test_create_w_default_object_acl_property(self):
+        PROJECT = "PROJECT"
+        BUCKET_NAME = "bucket-name"
+        DATA = {"name": BUCKET_NAME}
+        connection = _Connection(DATA)
+        client = _Client(connection, project=PROJECT)
+        bucket = self._make_one(client=client, name=BUCKET_NAME)
+        bucket.create(predefined_default_object_acl="publicRead")
+
+        kw, = connection._requested
+        self.assertEqual(kw["method"], "POST")
+        self.assertEqual(kw["path"], "/b")
+        self.assertEqual(
+            kw["query_params"],
+            {"project": PROJECT, "predefinedDefaultObjectAcl": "publicRead"},
+        )
+        self.assertEqual(kw["data"], DATA)
+
+    def test_create_w_invalid_default_object_acl_property(self):
+        PROJECT = "PROJECT"
+        BUCKET_NAME = "bucket-name"
+        DATA = {"name": BUCKET_NAME}
+        connection = _Connection(DATA)
+        client = _Client(connection, project=PROJECT)
+        bucket = self._make_one(client=client, name=BUCKET_NAME)
+        with self.assertRaises(ValueError):
+            bucket.create(predefined_default_object_acl="fake")
+
     def test_create_hit(self):
         PROJECT = "PROJECT"
         BUCKET_NAME = "bucket-name"
