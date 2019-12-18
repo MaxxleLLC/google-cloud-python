@@ -13,7 +13,9 @@
 # limitations under the License.
 """Convenience wrapper for invoking APIs/factories w/ a project."""
 
+import collections.abc
 import os
+import warnings
 
 import google.api_core.client_options
 from google.cloud._helpers import _LocalStack
@@ -663,29 +665,53 @@ class Client(ClientWithProject):
             kwargs["namespace"] = self.namespace
         return Query(self, **kwargs)
 
-    def reserve_ids(self, complete_key, num_ids):
+    def reserve_ids(self, complete_key=None, num_ids=None, complete_keys=None):
         """Reserve a list of IDs from a complete key.
 
         :type complete_key: :class:`google.cloud.datastore.key.Key`
-        :param complete_key: Partial key to use as base for reserved IDs.
+        :param complete_key: DEPRECATED. Partial key to use as base for reserved IDs.
 
         :type num_ids: int
-        :param num_ids: The number of IDs to reserve.
+        :param num_ids: DEPRECATED. The number of IDs to reserve.
 
-        :rtype: class:`NoneType`
-        :returns: None
-        :raises: :class:`ValueError` if `complete_key`` is not a
+        :type complete_keys: list of :class:`google.cloud.datastore.key.Key`
+        :param complete_keys: Partial keys to use as base for reserved IDs.
+
+        :raises: :class:`ValueError` if `complete_key` is not a
                  Complete key.
         """
+        if complete_keys:
+            self.reserve_ids_from_keys(complete_keys)
+            return
+
+        warnings.warn(
+            "`complete_key` and `num_ids` args are deprecated. Use complete_keys instead.",
+            PendingDeprecationWarning,
+            stacklevel=2,
+        )
         if complete_key.is_partial:
             raise ValueError(("Key is not Complete.", complete_key))
 
-        if not isinstance(num_ids, int):
+        if num_ids is not None and not isinstance(num_ids, int):
             raise ValueError(("num_ids is not a valid integer.", num_ids))
 
         complete_key_pb = complete_key.to_protobuf()
-        complete_key_pbs = [complete_key_pb] * num_ids
+        complete_key_pbs = [complete_key_pb] * (num_ids or 1)
 
         self._datastore_api.reserve_ids(complete_key.project, complete_key_pbs)
 
-        return None
+    def reserve_ids_from_keys(self, complete_keys):
+        """Reserve a list of IDs from a complete key.
+
+        :type complete_keys: list of :class:`google.cloud.datastore.key.Key`
+        :param complete_keys: Partial keys to use as base for reserved IDs.
+
+        :raises: :class:`ValueError` if one of `complete_keys` is not a
+                 Complete key.
+        """
+        for key in complete_keys:
+            if key.is_partial:
+                raise ValueError(("Key is not Complete.", key))
+
+        complete_keys_pbs = [key.to_protobuf() for key in complete_keys]
+        self._datastore_api.reserve_ids(complete_keys[0].project, complete_keys_pbs)
