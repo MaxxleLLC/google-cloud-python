@@ -23,7 +23,7 @@ Alternatively, you can install the BigQuery python client library with
 
 To retrieve query results as a :class:`pandas.DataFrame`:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/query_results_as_dataframe.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_query_results_dataframe]
@@ -31,7 +31,7 @@ To retrieve query results as a :class:`pandas.DataFrame`:
 
 To retrieve table rows as a :class:`pandas.DataFrame`:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/list_rows_as_dataframe.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_list_rows_dataframe]
