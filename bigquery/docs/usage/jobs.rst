@@ -19,3 +19,27 @@ List jobs for a project with the
    :dedent: 4
    :start-after: [START bigquery_list_jobs]
    :end-before: [END bigquery_list_jobs]
+
+Getting a Job
+^^^^^^^^^^^^^^^
+
+Get a job resource with the
+:func:`~google.cloud.bigquery.client.Client.get_job` method:
+
+.. literalinclude:: ../samples/get_job.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_get_job]
+   :end-before: [END bigquery_get_job]
+
+Cancelling a Job
+^^^^^^^^^^^^^^^
+
+Cancel a job with the
+:func:`~google.cloud.bigquery.client.Client.cancel_job` method:
+
+.. literalinclude:: ../samples/cancel_job.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_cancel_job]
+   :end-before: [END bigquery_cancel_job]

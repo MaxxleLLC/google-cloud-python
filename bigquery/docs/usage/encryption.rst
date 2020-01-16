@@ -10,7 +10,7 @@ in the BigQuery documentation for more details.
 Create a new table, using a customer-managed encryption key from
 Cloud KMS to encrypt it.
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/create_table_cmek
    :language: python
    :dedent: 4
    :start-after: [START bigquery_create_table_cmek]
@@ -18,7 +18,7 @@ Cloud KMS to encrypt it.
 
 Change the key used to encrypt a table.
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/update_table_cmek.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_update_table_cmek]
@@ -27,7 +27,7 @@ Change the key used to encrypt a table.
 Load a file from Cloud Storage, using a customer-managed encryption key from
 Cloud KMS for the destination table.
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/load_table_uri_cmek.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_load_table_gcs_json_cmek]
