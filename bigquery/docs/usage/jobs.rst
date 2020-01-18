@@ -21,7 +21,7 @@ List jobs for a project with the
    :end-before: [END bigquery_list_jobs]
 
 Getting a Job
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 Get a job resource with the
 :func:`~google.cloud.bigquery.client.Client.get_job` method:
@@ -33,7 +33,7 @@ Get a job resource with the
    :end-before: [END bigquery_get_job]
 
 Cancelling a Job
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 Cancel a job with the
 :func:`~google.cloud.bigquery.client.Client.cancel_job` method:

@@ -16,10 +16,9 @@
 def client_list_jobs():
 
     # [START bigquery_list_jobs]
+    import datetime
 
     from google.cloud import bigquery
-
-    import datetime
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
@@ -27,7 +26,7 @@ def client_list_jobs():
     # List the 10 most recent jobs in reverse chronological order.
     # Omit the max_results parameter to list jobs from the past 6 months.
     print("Last 10 jobs:")
-    for job in client.list_jobs(max_results=10):  # API request(s)
+    for job in client.list_jobs(max_results=10):  # Make an API request.(s)
         print("{}".format(job.job_id))
 
     # The following are examples of additional optional parameters:

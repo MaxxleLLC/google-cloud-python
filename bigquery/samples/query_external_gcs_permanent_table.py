@@ -43,13 +43,13 @@ def query_external_gcs_permanent_table(table_id):
     table.external_data_configuration = external_config
 
     # Create a permanent table linked to the GCS file
-    table = client.create_table(table)  # API request
+    table = client.create_table(table)  # Make an API request.
     # Example query to find states starting with 'W'
     sql = 'SELECT * FROM `{}.{}` WHERE name LIKE "W%"'.format(
         table.dataset_id, table.table_id
     )
 
-    query_job = client.query(sql)  # API request
+    query_job = client.query(sql)  # Make an API request.
 
     w_states = list(query_job)  # Waits for query to finish
     print("There are {} states with names starting with W.".format(len(w_states)))

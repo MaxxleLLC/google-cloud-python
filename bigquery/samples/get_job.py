@@ -30,7 +30,7 @@ def get_job():
     job = client.query(sql, location=location)
     job_id = job.job_id
 
-    job = client.get_job(job_id, location=location)  # API request
+    job = client.get_job(job_id, location=location)  # Make an API request.
     print("Details for job {} running in {}:".format(job_id, location))
 
     print(

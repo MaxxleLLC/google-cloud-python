@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +13,9 @@
 # limitations under the License.
 
 
-def load_table_uri_json(table_id):
-    # [START bigquery_load_table_gcs_json]
+def create_partitioned_table(table_id):
+
+    # [START bigquery_create_table_partitioned]
     from google.cloud import bigquery
 
     # Construct a BigQuery client object.
@@ -23,24 +24,25 @@ def load_table_uri_json(table_id):
     # TODO(developer): Set table_id to the ID of the table to create.
     # table_id = "your-project.your_dataset.your_table_name"
 
-    job_config = bigquery.LoadJobConfig(
+    table = bigquery.Table(
+        table_id,
         schema=[
             bigquery.SchemaField("name", "STRING"),
             bigquery.SchemaField("post_abbr", "STRING"),
+            bigquery.SchemaField("date", "DATE"),
         ],
-        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
     )
-    uri = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+    table.time_partitioning = bigquery.TimePartitioning(
+        type_=bigquery.TimePartitioningType.DAY,
+        field="date",  # name of column to use for partitioning
+        expiration_ms=7776000000,
+    )  # 90 days
 
-    load_job = client.load_table_from_uri(
-        uri,
-        table_id,
-        location="US",  # Must match the destination dataset location.
-        job_config=job_config,
-    )  # Make an API request.
-
-    load_job.result()  # Waits for the job to complete.
-
-    destination_table = client.get_table(table_id)
-    print("Loaded {} rows.".format(destination_table.num_rows))
-    # [END bigquery_load_table_gcs_json]
+    table = client.create_table(table)
+    print(
+        "Created table {}, partitioned on column {}".format(
+            table.table_id, table.time_partitioning.field
+        )
+    )
+    # [END bigquery_create_table_partitioned]
+    return table

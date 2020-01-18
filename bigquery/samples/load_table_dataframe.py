@@ -16,9 +16,9 @@
 def load_table_dataframe(table_id):
 
     # [START bigquery_load_table_dataframe]
-    from google.cloud import bigquery
-
     import pandas
+
+    from google.cloud import bigquery
 
     # Construct a BigQuery client object.
     client = bigquery.Client()

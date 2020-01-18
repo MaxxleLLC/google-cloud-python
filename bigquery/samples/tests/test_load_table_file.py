@@ -29,7 +29,7 @@ def test_load_table_file(capsys, random_table_id, client):
     out, _ = capsys.readouterr()
     assert "Loaded 2 rows and 2 columns" in out
 
-    rows = list(client.list_rows(table))  # API request
+    rows = list(client.list_rows(table))  # Make an API request.
     assert len(rows) == 2
     # Order is not preserved, so compare individually
     row1 = bigquery.Row(("Wylma Phlyntstone", 29), {"full_name": 0, "age": 1})

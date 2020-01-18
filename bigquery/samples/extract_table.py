@@ -16,10 +16,10 @@
 def extract_table(table_id):
 
     # [START bigquery_extract_table]
+    import time
+
     from google.cloud import bigquery
     from google.cloud import storage
-
-    import time
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
@@ -47,9 +47,9 @@ def extract_table(table_id):
     extract_job = client.extract_table(
         table,
         destination_uri,
-        # Location must match that of the source table.
+        # Must match the source table location.
         location="US",
-    )  # API request
+    )  # Make an API request.
     extract_job.result()  # Waits for job to complete.
 
     print(

@@ -28,9 +28,9 @@ def load_table_uri_parquet(table_id):
 
     load_job = client.load_table_from_uri(
         uri, table_id, job_config=job_config
-    )  # API request
+    )  # Make an API request.
 
-    load_job.result()  # Waits for table load to complete.
+    load_job.result()  # Waits for the job to complete.
 
     destination_table = client.get_table(table_id)
     print("Loaded {} rows.".format(destination_table.num_rows))

@@ -35,7 +35,7 @@ def create_table_cmek(table_id, kms_key_name):
         kms_key_name=kms_key_name
     )
 
-    table = client.create_table(table)  # API request
+    table = client.create_table(table)  # Make an API request.
 
     if table.encryption_configuration.kms_key_name == kms_key_name:
         print("A table created with encryption configuration key")

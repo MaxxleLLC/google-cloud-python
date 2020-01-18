@@ -43,13 +43,13 @@ def load_table_uri_cmek(table_id, kms_key_name):
     load_job = client.load_table_from_uri(
         uri,
         table_id,
-        location="US",  # Location must match that of the destination dataset.
+        location="US",  # Must match the destination dataset location.
         job_config=job_config,
-    )  # API request
+    )  # Make an API request.
 
     assert load_job.job_type == "load"
 
-    load_job.result()  # Waits for table load to complete.
+    load_job.result()  # Waits for the job to complete.
 
     assert load_job.state == "DONE"
     table = client.get_table(table_id)

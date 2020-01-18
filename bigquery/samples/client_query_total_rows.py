@@ -28,10 +28,10 @@ def client_query_total_rows():
     )
     query_job = client.query(
         query,
-        # Location must match that of the dataset(s) referenced in the query.
+        # Must match the dataset(s) location referenced in the query.
         location="US",
-    )  # API request - starts the query
+    )  # Make an API request. - starts the query
 
-    results = query_job.result()  # Wait for query to complete.
+    results = query_job.result()  # Wait for the query to complete.
     print("Got {} rows.".format(results.total_rows))
     # [END bigquery_query_total_rows]

@@ -16,10 +16,10 @@
 def extract_table_json(table_id):
 
     # [START bigquery_extract_table_json]
+    import time
+
     from google.cloud import bigquery
     from google.cloud import storage
-
-    import time
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
@@ -42,9 +42,9 @@ def extract_table_json(table_id):
         table_id,
         destination_uri,
         job_config=job_config,
-        # Location must match that of the source table.
+        # Must match the source table location.
         location="US",
-    )  # API request
+    )  # Make an API request.
     extract_job.result()  # Waits for job to complete.
 
     table = client.get_table(table_id)

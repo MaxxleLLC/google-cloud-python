@@ -53,9 +53,9 @@ def load_table_add_column(file_path, table_id):
             table_id,
             location="US",  # Must match the destination dataset location.
             job_config=job_config,
-        )  # API request
+        )  # Make an API request.
 
-    job.result()  # Waits for table load to complete.
+    job.result()  # Waits for the job to complete.
     print(
         "Loaded {} rows into {}:{}.".format(
             job.output_rows, table.dataset_id, table.table_id

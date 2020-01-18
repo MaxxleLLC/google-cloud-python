@@ -67,6 +67,15 @@ Create an integer range partitioned table with the
    :start-after: [START bigquery_create_table_range_partitioned]
    :end-before: [END bigquery_create_table_range_partitioned]
 
+Create a partitioned table with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../samples/create_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_create_table_partitioned]
+   :end-before: [END bigquery_create_table_partitioned]
+
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
 
@@ -132,10 +141,26 @@ Load a ORC file from Cloud Storage:
 See also: `Loading ORC data from Cloud Storage
 <https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-orc>`_.
 
+Load a autodetect CSV file from Cloud Storage:
+
+.. literalinclude:: ../samples/load_table_uri_autodetect_csv.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_load_table_gcs_csv_autodetect]
+   :end-before: [END bigquery_load_table_gcs_csv_autodetect]
+
+Load a autodetect JSON file from Cloud Storage:
+
+.. literalinclude:: ../samples/load_table_uri_autodetect_json.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_load_table_gcs_json_autodetect]
+   :end-before: [END bigquery_load_table_gcs_json_autodetect]
+
 Updating a Table
 ^^^^^^^^^^^^^^^^
 
-Update a property in a table's metadata with the
+Update a description property in a table's metadata with the
 :func:`~google.cloud.bigquery.client.Client.update_table` method:
 
 .. literalinclude:: ../samples/update_table_description.py
@@ -143,6 +168,15 @@ Update a property in a table's metadata with the
    :dedent: 4
    :start-after: [START bigquery_update_table_description]
    :end-before: [END bigquery_update_table_description]
+
+Update a expire property in a table's metadata with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/update_table_expiration.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_update_table_expiration]
+   :end-before: [END bigquery_update_table_expiration]
 
 Insert rows into a table's data with the
 :func:`~google.cloud.bigquery.client.Client.insert_rows` method:

@@ -13,12 +13,13 @@
 # limitations under the License.
 
 
-def list_rows_as_dataframe(table_id):
+def update_table_expiration(table_id):
 
-    # [START bigquery_list_rows_dataframe]
-    import pandas
-
+    # [START bigquery_update_table_expiration]
     from google.cloud import bigquery
+
+    import datetime
+    import pytz
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
@@ -26,12 +27,23 @@ def list_rows_as_dataframe(table_id):
     # TODO(developer): Set table_id to the ID of the model to fetch.
     # table_id = 'your-project.your_dataset.your_table'
 
-    table = client.get_table(table_id)
-
-    df = client.list_rows(table).to_dataframe()
-
-    assert isinstance(df, pandas.DataFrame)
-    print(
-        "There are {} rows and {} columns in dataframe.".format(len(list(df)), len(df))
+    table = bigquery.Table(
+        table_id,
+        schema=[
+            bigquery.SchemaField("full_name", "STRING", mode="REQUIRED"),
+            bigquery.SchemaField("age", "INTEGER", mode="REQUIRED"),
+        ],
     )
-    # [END bigquery_list_rows_dataframe]
+    table = client.create_table(table)
+    assert table.expires is None
+
+    # set table to expire 5 days from now
+    expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=5)
+    table.expires = expiration
+    table = client.update_table(table, ["expires"])  # Make an API request.
+
+    print(
+        "Updated table {} with new expiration {}".format(table.table_id, table.expires)
+    )
+    # [END bigquery_update_table_expiration]
+    return table, expiration

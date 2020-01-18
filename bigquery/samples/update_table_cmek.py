@@ -35,12 +35,14 @@ def update_table_cmek(table_id, old_kms_key_name, new_kms_key_name):
         kms_key_name=old_kms_key_name
     )
 
-    table = client.create_table(table)  # API request
+    table = client.create_table(table)  # Make an API request.
 
     table.encryption_configuration = bigquery.EncryptionConfiguration(
         kms_key_name=new_kms_key_name
     )
-    table = client.update_table(table, ["encryption_configuration"])  # API request
+    table = client.update_table(
+        table, ["encryption_configuration"]
+    )  # Make an API request.
 
     if table.encryption_configuration.kms_key_name == new_kms_key_name:
         print("A table updated with encryption configuration key")

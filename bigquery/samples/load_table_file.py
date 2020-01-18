@@ -15,7 +15,7 @@
 
 def load_table_file(file_path, table_id):
 
-    # [START bigquery_load_table_file]
+    # [START bigquery_load_from_file]
     from google.cloud import bigquery
 
     # Construct a BigQuery client object.
@@ -31,7 +31,7 @@ def load_table_file(file_path, table_id):
     with open(file_path, "rb") as source_file:
         job = client.load_table_from_file(source_file, table_id, job_config=job_config)
 
-    job.result()  # Waits for table load to complete.
+    job.result()  # Waits for the job to complete.
 
     table = client.get_table(table_id)  # Make an API request.
     print(
@@ -39,5 +39,5 @@ def load_table_file(file_path, table_id):
             table.num_rows, len(table.schema), table_id
         )
     )
-    # [END bigquery_load_table_file]
+    # [END bigquery_load_from_file]
     return table

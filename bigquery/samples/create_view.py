@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,13 +13,16 @@
 # limitations under the License.
 
 
-def load_table_uri_csv(table_id):
+def create_view(load_table_id, table_id):
 
-    # [START bigquery_load_table_gcs_csv]
+    # [START bigquery_create_view]
     from google.cloud import bigquery
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the table to load the data.
+    # load_table_id = "your-project.your_dataset.your_table_name"
 
     # TODO(developer): Set table_id to the ID of the table to create.
     # table_id = "your-project.your_dataset.your_table_name"
@@ -30,17 +33,22 @@ def load_table_uri_csv(table_id):
             bigquery.SchemaField("post_abbr", "STRING"),
         ],
         skip_leading_rows=1,
-        # The source format defaults to CSV, so the line below is optional.
-        source_format=bigquery.SourceFormat.CSV,
     )
     uri = "gs://cloud-samples-data/bigquery/us-states/us-states.csv"
 
-    load_job = client.load_table_from_uri(
-        uri, table_id, job_config=job_config
-    )  # Make an API request.
+    load_job = client.load_table_from_uri(uri, load_table_id, job_config=job_config)
+    load_job.result()
+    table = client.get_table(load_table_id)
+    view = bigquery.Table(table_id)
+    sql_template = 'SELECT name, post_abbr FROM `{}.{}.{}` WHERE name LIKE "W%"'
+    view.view_query = sql_template.format(
+        view.project, table.dataset_id, table.table_id
+    )
+    view = client.create_table(view)  # Make an API request.
 
-    load_job.result()  # Waits for the job to complete.
-
-    destination_table = client.get_table(table_id)  # Make an API request.
-    print("Loaded {} rows.".format(destination_table.num_rows))
-    # [END bigquery_load_table_gcs_csv]
+    print(
+        "Successfully created view at {}.{}.{}".format(
+            view.project, view.dataset_id, view.table_id
+        )
+    )
+    # [END bigquery_create_view]
