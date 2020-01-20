@@ -12,10 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .. import create_view
+from .. import label_table
+from .. import get_table_labels
+from .. import delete_table_labels
 
 
-def test_create_view(capsys, table_id, random_table_id):
-    create_view.create_view(table_id, random_table_id)
+def test_table_label_samples(capsys, table_id):
+
+    label_table.label_table(table_id)
     out, err = capsys.readouterr()
-    assert "Successfully created view at {}".format(random_table_id) in out
+    assert "Labels added to {}".format(table_id) in out
+
+    get_table_labels.get_table_labels(table_id)
+    out, err = capsys.readouterr()
+    assert "color: green" in out
+
+    dataset = delete_table_labels.delete_table_labels(table_id)
+    out, err = capsys.readouterr()
+    assert "Labels deleted from {}".format(table_id) in out
+    assert dataset.labels.get("color") is None

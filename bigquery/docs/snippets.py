@@ -21,11 +21,9 @@ a ``to_delete`` list;  the function adds to the list any objects created which
 need to be deleted during teardown.
 """
 
-import os
 import time
 
 import pytest
-import six
 
 try:
     import fastparquet
@@ -120,114 +118,6 @@ def test_create_client_default_credentials():
     # [END bigquery_client_default_credentials]
 
     assert client is not None
-
-
-def test_create_table_nested_repeated_schema(client, to_delete):
-    dataset_id = "create_table_nested_repeated_{}".format(_millis())
-    dataset_ref = client.dataset(dataset_id)
-    dataset = bigquery.Dataset(dataset_ref)
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
-    # [START bigquery_nested_repeated_schema]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # dataset_ref = client.dataset('my_dataset')
-
-    schema = [
-        bigquery.SchemaField("id", "STRING", mode="NULLABLE"),
-        bigquery.SchemaField("first_name", "STRING", mode="NULLABLE"),
-        bigquery.SchemaField("last_name", "STRING", mode="NULLABLE"),
-        bigquery.SchemaField("dob", "DATE", mode="NULLABLE"),
-        bigquery.SchemaField(
-            "addresses",
-            "RECORD",
-            mode="REPEATED",
-            fields=[
-                bigquery.SchemaField("status", "STRING", mode="NULLABLE"),
-                bigquery.SchemaField("address", "STRING", mode="NULLABLE"),
-                bigquery.SchemaField("city", "STRING", mode="NULLABLE"),
-                bigquery.SchemaField("state", "STRING", mode="NULLABLE"),
-                bigquery.SchemaField("zip", "STRING", mode="NULLABLE"),
-                bigquery.SchemaField("numberOfYears", "STRING", mode="NULLABLE"),
-            ],
-        ),
-    ]
-    table_ref = dataset_ref.table("my_table")
-    table = bigquery.Table(table_ref, schema=schema)
-    table = client.create_table(table)  # API request
-
-    print("Created table {}".format(table.full_table_id))
-    # [END bigquery_nested_repeated_schema]
-
-
-@pytest.mark.skip(
-    reason=(
-        "update_table() is flaky "
-        "https://github.com/GoogleCloudPlatform/google-cloud-python/issues/5589"
-    )
-)
-def test_manage_table_labels(client, to_delete):
-    dataset_id = "label_table_dataset_{}".format(_millis())
-    table_id = "label_table_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
-    table = bigquery.Table(dataset.table(table_id), schema=SCHEMA)
-    table = client.create_table(table)
-
-    # [START bigquery_label_table]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # table_ref = client.dataset('my_dataset').table('my_table')
-    # table = client.get_table(table_ref)  # API request
-
-    assert table.labels == {}
-    labels = {"color": "green"}
-    table.labels = labels
-
-    table = client.update_table(table, ["labels"])  # API request
-
-    assert table.labels == labels
-    # [END bigquery_label_table]
-
-    # [START bigquery_get_table_labels]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
-    # table_id = 'my_table'
-
-    dataset_ref = client.dataset(dataset_id)
-    table_ref = dataset_ref.table(table_id)
-    table = client.get_table(table_ref)  # API Request
-
-    # View table labels
-    print("Table ID: {}".format(table_id))
-    print("Labels:")
-    if table.labels:
-        for label, value in table.labels.items():
-            print("\t{}: {}".format(label, value))
-    else:
-        print("\tTable has no labels defined.")
-    # [END bigquery_get_table_labels]
-    assert table.labels == labels
-
-    # [START bigquery_delete_label_table]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # table_ref = client.dataset('my_dataset').table('my_table')
-    # table = client.get_table(table_ref)  # API request
-
-    # This example table starts with one label
-    assert table.labels == {"color": "green"}
-    # To delete a label from a table, set its value to None
-    table.labels["color"] = None
-
-    table = client.update_table(table, ["labels"])  # API request
-
-    assert table.labels == {}
-    # [END bigquery_delete_label_table]
 
 
 if __name__ == "__main__":

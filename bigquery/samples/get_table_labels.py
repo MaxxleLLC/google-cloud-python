@@ -13,30 +13,26 @@
 # limitations under the License.
 
 
-def update_view(table_id):
+def get_table_labels(table_id):
 
-    # [START bigquery_update_view_query]
+    # [START bigquery_label_table]
+
     from google.cloud import bigquery
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
 
-    # TODO(developer): Set table_id to the ID of the table to load the data.
-    # load_table_id = "your-project.your_dataset.your_table_name"
-
     # TODO(developer): Set table_id to the ID of the table to create.
     # table_id = "your-project.your_dataset.your_table_name"
 
-    view = client.get_table(table_id)  # Make an API request.
-    old_view_query = view.view_query
+    table = client.get_table(table_id)  # Make an API request.
 
-    sql_template = 'SELECT name, post_abbr FROM `{}.{}.{}` WHERE name LIKE "M%"'
-    view.view_query = sql_template.format(
-        view.project, view.dataset_id, view.table_id
-    )
-    view = client.update_table(view, ["view_query"])  # API request
-    new_view_query = view.view_query
-
-    if old_view_query != new_view_query:
-        print("The View query has been updated.")
-    # [END bigquery_update_view_query]
+    # View table labels.
+    print("Table ID: {}".format(table_id))
+    print("Labels:")
+    if table.labels:
+        for label, value in table.labels.items():
+            print("\t{}: {}".format(label, value))
+    else:
+        print("\tTable has no labels defined.")
+    # [END bigquery_label_table]

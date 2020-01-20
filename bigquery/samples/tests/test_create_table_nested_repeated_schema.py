@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .. import update_view
+from .. import create_table_nested_repeated_schema
 
 
-def test_update_view(capsys, table_id, random_table_id):
-    update_view.update_view(table_id, random_table_id)
+def test_create_table_nested_repeated_schema(capsys, random_table_id):
+
+    create_table_nested_repeated_schema.create_table_nested_repeated_schema(
+        random_table_id
+    )
     out, err = capsys.readouterr()
-    assert "The View query has been updated." in out
+    assert "Created table {}".format(random_table_id) in out

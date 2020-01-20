@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-def get_view(load_table_id, table_id):
+def get_view(table_id):
 
     # [START bigquery_get_view]
     from google.cloud import bigquery
@@ -27,25 +27,9 @@ def get_view(load_table_id, table_id):
     # TODO(developer): Set table_id to the ID of the table to create.
     # table_id = "your-project.your_dataset.your_table_name"
 
-    job_config = bigquery.LoadJobConfig(
-        schema=[
-            bigquery.SchemaField("name", "STRING"),
-            bigquery.SchemaField("post_abbr", "STRING"),
-        ],
-        skip_leading_rows=1,
-    )
-    uri = "gs://cloud-samples-data/bigquery/us-states/us-states.csv"
+    view = client.get_table(table_id)  # Make an API request.
 
-    load_job = client.load_table_from_uri(uri, load_table_id, job_config=job_config)
-    load_job.result()
-    table = client.get_table(load_table_id)
-    view = bigquery.Table(table_id)
-    sql_template = 'SELECT name, post_abbr FROM `{}.{}.{}` WHERE name LIKE "W%"'
-    view.view_query = sql_template.format(
-        view.project, table.dataset_id, table.table_id
-    )
-    view = client.create_table(view)  # Make an API request.
-
+    # Display view properties
     print("View at {}".format(view.full_table_id))
     print("View Query:\n{}".format(view.view_query))
     # [END bigquery_get_view]

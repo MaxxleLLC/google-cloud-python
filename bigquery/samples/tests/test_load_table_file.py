@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+
 from google.cloud import bigquery
 
 from .. import load_table_file

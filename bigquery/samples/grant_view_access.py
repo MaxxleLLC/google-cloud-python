@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-def grant_view_access(load_table_id, dataset_id):
+def grant_view_access(table_id, dataset_id):
 
     # [START bigquery_update_view_query]
     from google.cloud import bigquery
@@ -21,21 +21,13 @@ def grant_view_access(load_table_id, dataset_id):
     # Construct a BigQuery client object.
     client = bigquery.Client()
 
-    # TODO(developer): Set table_id to the ID of the table to load the data.
+    # TODO(developer): Set table_id to the ID of the table.
     # load_table_id = "your-project.your_dataset.your_table_name"
 
-    job_config = bigquery.LoadJobConfig(
-        schema=[
-            bigquery.SchemaField("name", "STRING"),
-            bigquery.SchemaField("post_abbr", "STRING"),
-        ],
-        skip_leading_rows=1,
-    )
-    uri = "gs://cloud-samples-data/bigquery/us-states/us-states.csv"
+    # TODO(developer): Set dataset_id to the ID of the dataset to create.
+    # dataset_id = "{}.your_dataset".format(client.project)
 
-    load_job = client.load_table_from_uri(uri, load_table_id, job_config=job_config)
-    load_job.result()
-    table = client.get_table(load_table_id)
+    table = client.get_table(table_id)  # Make an API request.
     analyst_group_email = "example-analyst-group@google.com"
 
     # Assign access controls to the dataset
@@ -53,9 +45,6 @@ def grant_view_access(load_table_id, dataset_id):
         print("Assign access controls to the dataset successfully.")
 
     # Authorize the view to access the source dataset
-
-    # TODO(developer): Set dataset_id to the ID of the dataset to create.
-    # dataset_id = "{}.your_dataset".format(client.project)
     source_dataset = client.create_dataset(dataset_id)  # Make an API request.
 
     view_reference = {
