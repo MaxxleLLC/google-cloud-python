@@ -198,3 +198,38 @@ Restore a deleted table from a snapshot by using the
    :dedent: 4
    :start-after: [START bigquery_undelete_table]
    :end-before: [END bigquery_undelete_table]
+
+Share a view of Table
+^^^^^^^^^^^^^^^^^^^^^^
+
+Create and share a view of source table:
+
+.. literalinclude:: ../samples/create_view.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_create_view]
+   :end-before: [END bigquery_create_view]
+
+Update a shared view of a source table:
+
+.. literalinclude:: ../samples/update_view.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_update_view_query]
+   :end-before: [END bigquery_update_view_query]
+
+Authorize the view to access the source dataset:
+
+.. literalinclude:: ../samples/grant_view_access.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_grant_view_access]
+   :end-before: [END bigquery_grant_view_access]
+
+Get a view of table:
+
+.. literalinclude:: ../samples/get_view.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_get_view]
+   :end-before: [END bigquery_get_view]
