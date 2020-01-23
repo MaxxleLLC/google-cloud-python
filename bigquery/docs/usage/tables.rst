@@ -210,6 +210,14 @@ Create and share a view of source table:
    :start-after: [START bigquery_create_view]
    :end-before: [END bigquery_create_view]
 
+Create a view via DDL query:
+
+.. literalinclude:: ../samples/create_view_dll.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_ddl_create_view]
+   :end-before: [END bigquery_ddl_create_view]
+
 Update a shared view of a source table:
 
 .. literalinclude:: ../samples/update_view.py
