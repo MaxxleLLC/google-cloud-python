@@ -46,6 +46,14 @@ Browse data rows in a table with the
    :start-after: [START bigquery_browse_table]
    :end-before: [END bigquery_browse_table]
 
+Get a labels to the existing table:
+
+.. literalinclude:: ../samples/get_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_get_table_labels]
+   :end-before: [END bigquery_get_table_labels]
+
 Creating a Table
 ^^^^^^^^^^^^^^^^
 
@@ -113,14 +121,23 @@ See also: `Loading Parquet data from Cloud Storage
 Updating a Table
 ^^^^^^^^^^^^^^^^
 
-Update a property in a table's metadata with the
+Update a description property in a table's metadata with the
 :func:`~google.cloud.bigquery.client.Client.update_table` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/update_table_description.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_update_table_description]
    :end-before: [END bigquery_update_table_description]
+
+Update a expires property in a table's metadata with the
+:func:`~google.cloud.bigquery.client.Client.update_table` method:
+
+.. literalinclude:: ../samples/update_table_expiration.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_update_table_expiration]
+   :end-before: [END bigquery_update_table_expiration]
 
 Insert rows into a table's data with the
 :func:`~google.cloud.bigquery.client.Client.insert_rows` method:
@@ -153,6 +170,22 @@ Add an empty column to the existing table with the
    :dedent: 4
    :start-after: [START bigquery_add_empty_column]
    :end-before: [END bigquery_add_empty_column]
+
+Add a labels to the existing table:
+
+.. literalinclude:: ../samples/label_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_label_table]
+   :end-before: [END bigquery_label_table]
+
+Delete a labels to the existing table:
+
+.. literalinclude:: ../samples/delete_table_labels.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_delete_label_table]
+   :end-before: [END bigquery_delete_label_table]
 
 Copying a Table
 ^^^^^^^^^^^^^^^
