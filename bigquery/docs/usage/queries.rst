@@ -61,3 +61,12 @@ standard SQL
    :dedent: 4
    :start-after: [START bigquery_query_script]
    :end-before: [END bigquery_query_script]
+
+Run a query to check number of rows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/client_query_total_rows.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_query_total_rows]
+   :end-before: [END bigquery_query_total_rows]
