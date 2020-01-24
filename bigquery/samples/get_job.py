@@ -28,10 +28,9 @@ def get_job():
     """
     location = "us"
     job = client.query(sql, location=location)
-    job_id = job.job_id
 
-    job = client.get_job(job_id, location=location)  # Make an API request.
-    print("Details for job {} running in {}:".format(job_id, location))
+    job = client.get_job(job.job_id, location=location)  # Make an API request.
+    print("Details for job {} running in {}:".format(job.job_id, location))
 
     print(
         "Type: {}, State: {}, Created: {}".format(job.job_type, job.state, job.created)
