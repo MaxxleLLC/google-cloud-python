@@ -28,9 +28,7 @@ def cancel_job():
     """
     location = "us"
     job = client.query(sql, location=location)
-
     job = client.cancel_job(job.job_id, location=location)
-
     print("The job has been cancelled")
     print(
         "Type: {}, State: {}, Created: {}".format(job.job_type, job.state, job.created)
