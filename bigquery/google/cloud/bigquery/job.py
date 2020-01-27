@@ -782,7 +782,7 @@ class _AsyncJob(google.api_core.future.polling.PollingFuture):
         Returns:
             bool: True if the job is complete, False otherwise.
         """
-        # Do not refresh is the state is already done, as the job will not
+        # Do not refresh if the state is already done, as the job will not
         # change once complete.
         if self.state != _DONE_STATE:
             self.reload(retry=retry, timeout=timeout)
