@@ -1349,6 +1349,7 @@ class RowIterator(HTTPIterator):
         self._preserve_order = False
         self._project = client.project
         self._schema = schema
+        self._schema = schema
         self._selected_fields = selected_fields
         self._table = table
         self._total_rows = getattr(table, "num_rows", None)
@@ -1362,6 +1363,8 @@ class RowIterator(HTTPIterator):
         """
         params = self._get_query_params()
         if self._page_size is not None:
+            if self.page_number != 0 and "startIndex" in params:
+                del params["startIndex"]
             params["maxResults"] = self._page_size
         return self.api_request(
             method=self._HTTP_METHOD, path=self.path, query_params=params
