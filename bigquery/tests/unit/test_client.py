@@ -5646,16 +5646,14 @@ class TestClient(unittest.TestCase):
 
         iterator = client.list_rows(table, max_results=4, page_size=2, start_index=1)
         pages = iterator.pages
-        first_page = six.next(pages)
-        rows = list(first_page)
+        rows = list(six.next(pages))
         extra_params = iterator.extra_params
         f2i = {"full_name": 0}
         self.assertEqual(len(rows), 2)
         self.assertEqual(rows[0], Row(("Phred Phlyntstone",), f2i))
         self.assertEqual(rows[1], Row(("Bharney Rhubble",), f2i))
 
-        second_page = six.next(pages)
-        rows = list(second_page)
+        rows = list(six.next(pages))
 
         self.assertEqual(len(rows), 2)
         self.assertEqual(rows[0], Row(("Wylma Phlyntstone",), f2i))
