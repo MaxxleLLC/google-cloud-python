@@ -161,35 +161,6 @@ def test_create_table_nested_repeated_schema(client, to_delete):
     # [END bigquery_nested_repeated_schema]
 
 
-def test_create_table_cmek(client, to_delete):
-    dataset_id = "create_table_cmek_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
-    # [START bigquery_create_table_cmek]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # dataset_id = 'my_dataset'
-
-    table_ref = client.dataset(dataset_id).table("my_table")
-    table = bigquery.Table(table_ref)
-
-    # Set the encryption key to use for the table.
-    # TODO: Replace this key with a key you have created in Cloud KMS.
-    kms_key_name = "projects/{}/locations/{}/keyRings/{}/cryptoKeys/{}".format(
-        "cloud-samples-tests", "us", "test", "test"
-    )
-    table.encryption_configuration = bigquery.EncryptionConfiguration(
-        kms_key_name=kms_key_name
-    )
-
-    table = client.create_table(table)  # API request
-
-    assert table.encryption_configuration.kms_key_name == kms_key_name
-    # [END bigquery_create_table_cmek]
-
-
 def test_create_partitioned_table(client, to_delete):
     dataset_id = "create_table_partitioned_{}".format(_millis())
     dataset_ref = bigquery.Dataset(client.dataset(dataset_id))
@@ -409,51 +380,6 @@ def test_relax_column(client, to_delete):
 
     assert all(field.mode == "NULLABLE" for field in table.schema)
     # [END bigquery_relax_column]
-
-
-@pytest.mark.skip(
-    reason=(
-        "update_table() is flaky "
-        "https://github.com/GoogleCloudPlatform/google-cloud-python/issues/5589"
-    )
-)
-def test_update_table_cmek(client, to_delete):
-    """Patch a table's metadata."""
-    dataset_id = "update_table_cmek_{}".format(_millis())
-    table_id = "update_table_cmek_{}".format(_millis())
-    dataset = bigquery.Dataset(client.dataset(dataset_id))
-    client.create_dataset(dataset)
-    to_delete.append(dataset)
-
-    table = bigquery.Table(dataset.table(table_id))
-    original_kms_key_name = "projects/{}/locations/{}/keyRings/{}/cryptoKeys/{}".format(
-        "cloud-samples-tests", "us", "test", "test"
-    )
-    table.encryption_configuration = bigquery.EncryptionConfiguration(
-        kms_key_name=original_kms_key_name
-    )
-    table = client.create_table(table)
-
-    # [START bigquery_update_table_cmek]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-
-    assert table.encryption_configuration.kms_key_name == original_kms_key_name
-
-    # Set a new encryption key to use for the destination.
-    # TODO: Replace this key with a key you have created in KMS.
-    updated_kms_key_name = (
-        "projects/cloud-samples-tests/locations/us/keyRings/test/cryptoKeys/otherkey"
-    )
-    table.encryption_configuration = bigquery.EncryptionConfiguration(
-        kms_key_name=updated_kms_key_name
-    )
-
-    table = client.update_table(table, ["encryption_configuration"])  # API request
-
-    assert table.encryption_configuration.kms_key_name == updated_kms_key_name
-    assert original_kms_key_name != updated_kms_key_name
-    # [END bigquery_update_table_cmek]
 
 
 @pytest.mark.skip(
@@ -887,109 +813,6 @@ def test_load_table_relax_column(client, to_delete):
     assert len(table.schema) == 3
     assert table.schema[2].mode == "NULLABLE"
     assert table.num_rows > 0
-
-
-def test_extract_table(client, to_delete):
-    bucket_name = "extract_shakespeare_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
-
-    # [START bigquery_extract_table]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
-    project = "bigquery-public-data"
-    dataset_id = "samples"
-    table_id = "shakespeare"
-
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.csv")
-    dataset_ref = client.dataset(dataset_id, project=project)
-    table_ref = dataset_ref.table(table_id)
-
-    extract_job = client.extract_table(
-        table_ref,
-        destination_uri,
-        # Location must match that of the source table.
-        location="US",
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
-
-    print(
-        "Exported {}:{}.{} to {}".format(project, dataset_id, table_id, destination_uri)
-    )
-    # [END bigquery_extract_table]
-
-    blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
-
-
-def test_extract_table_json(client, to_delete):
-    bucket_name = "extract_shakespeare_json_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
-
-    # [START bigquery_extract_table_json]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
-
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.json")
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
-    job_config = bigquery.job.ExtractJobConfig()
-    job_config.destination_format = bigquery.DestinationFormat.NEWLINE_DELIMITED_JSON
-
-    extract_job = client.extract_table(
-        table_ref,
-        destination_uri,
-        job_config=job_config,
-        # Location must match that of the source table.
-        location="US",
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
-    # [END bigquery_extract_table_json]
-
-    blob = retry_storage_errors(bucket.get_blob)("shakespeare.json")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
-
-
-def test_extract_table_compressed(client, to_delete):
-    bucket_name = "extract_shakespeare_compress_{}".format(_millis())
-    storage_client = storage.Client()
-    bucket = retry_storage_errors(storage_client.create_bucket)(bucket_name)
-    to_delete.append(bucket)
-
-    # [START bigquery_extract_table_compressed]
-    # from google.cloud import bigquery
-    # client = bigquery.Client()
-    # bucket_name = 'my-bucket'
-
-    destination_uri = "gs://{}/{}".format(bucket_name, "shakespeare.csv.gz")
-    dataset_ref = client.dataset("samples", project="bigquery-public-data")
-    table_ref = dataset_ref.table("shakespeare")
-    job_config = bigquery.job.ExtractJobConfig()
-    job_config.compression = bigquery.Compression.GZIP
-
-    extract_job = client.extract_table(
-        table_ref,
-        destination_uri,
-        # Location must match that of the source table.
-        location="US",
-        job_config=job_config,
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
-    # [END bigquery_extract_table_compressed]
-
-    blob = retry_storage_errors(bucket.get_blob)("shakespeare.csv.gz")
-    assert blob.exists
-    assert blob.size > 0
-    to_delete.insert(0, blob)
 
 
 def test_client_query_total_rows(client, capsys):

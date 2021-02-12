@@ -191,11 +191,27 @@ Copy a table with the
 Copy table data to Google Cloud Storage with the
 :func:`~google.cloud.bigquery.client.Client.extract_table` method:
 
-.. literalinclude:: ../snippets.py
+.. literalinclude:: ../samples/extract_table.py
    :language: python
    :dedent: 4
    :start-after: [START bigquery_extract_table]
    :end-before: [END bigquery_extract_table]
+
+Copy table data to Google Cloud Storage json file:
+
+.. literalinclude:: ../samples/extract_table_compressed.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_extract_table_compressed]
+   :end-before: [END bigquery_extract_table_compressed]
+
+Copy table data to Google Cloud Storage compressed file:
+
+.. literalinclude:: ../samples/extract_table_json.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_extract_table_json]
+   :end-before: [END bigquery_extract_table_json]
 
 Deleting a Table
 ^^^^^^^^^^^^^^^^
