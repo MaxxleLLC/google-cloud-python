@@ -67,6 +67,24 @@ Create an integer range partitioned table with the
    :start-after: [START bigquery_create_table_range_partitioned]
    :end-before: [END bigquery_create_table_range_partitioned]
 
+Create a table partition with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../samples/create_partitioned_table.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_create_table_partitioned]
+   :end-before: [END bigquery_create_table_partitioned]
+
+Create a nested repeated schema table partition with the
+:func:`~google.cloud.bigquery.client.Client.create_table` method:
+
+.. literalinclude:: ../samples/create_table_nested_repeated_schema.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_nested_repeated_schema]
+   :end-before: [END bigquery_nested_repeated_schema]
+
 Load table data from a file with the
 :func:`~google.cloud.bigquery.client.Client.load_table_from_file` method:
 
@@ -175,6 +193,38 @@ Add an empty column to the existing table with the
    :dedent: 4
    :start-after: [START bigquery_add_empty_column]
    :end-before: [END bigquery_add_empty_column]
+
+Update schema field from required to nullable:
+
+.. literalinclude:: ../samples/relax_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_relax_column]
+   :end-before: [END bigquery_relax_column]
+
+Add a column to the existing table:
+
+.. literalinclude:: ../samples/load_table_add_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_add_column_load_append]
+   :end-before: [END bigquery_add_column_load_append]
+
+Add a nullable column to the existing table:
+
+.. literalinclude:: ../samples/load_table_add_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_add_column_load_append]
+   :end-before: [END bigquery_add_column_load_append]
+
+Relaxing a required field in the original schema to nullable:
+
+.. literalinclude:: ../samples/load_table_relax_column.py
+   :language: python
+   :dedent: 4
+   :start-after: [START bigquery_relax_column_load_append]
+   :end-before: [END bigquery_relax_column_load_append]
 
 Copying a Table
 ^^^^^^^^^^^^^^^
