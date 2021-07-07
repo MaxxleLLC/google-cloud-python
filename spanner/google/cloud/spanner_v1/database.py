@@ -424,6 +424,7 @@ class Database(object):
         :rtype: :class:`~google.cloud.spanner_v1.database.SnapshotCheckout`
         :returns: new wrapper
         """
+        self._validate()
         return SnapshotCheckout(self, **kw)
 
     def batch(self):
@@ -435,6 +436,7 @@ class Database(object):
         :rtype: :class:`~google.cloud.spanner_v1.database.BatchCheckout`
         :returns: new wrapper
         """
+        self._validate()
         return BatchCheckout(self)
 
     def batch_snapshot(self, read_timestamp=None, exact_staleness=None):
@@ -491,6 +493,26 @@ class Database(object):
                 return session.run_in_transaction(func, *args, **kw)
         finally:
             self._local.transaction_running = False
+
+    def _validate(self):
+        """ A helper check-point to categorize the inevitable errors
+
+        Throws an exception with the appropriate message if either, the database
+        or the corresponding instance are misspelled or do not exist. This helps
+        prevent possible confusion caused by a less-specific error message returned
+        from the subsequent calling of 'self._database._pool.get()'.
+        """
+        if not self.exists():
+            if not self._instance.exists():
+                raise ValueError(
+                    'Instance "{}" does not exist!'.format(self._instance.instance_id)
+                )
+            else:
+                raise ValueError(
+                    'Database "{}" does not exist in instance "{}"'.format(
+                        self.database_id, self._instance.instance_id
+                    )
+                )
 
 
 class BatchCheckout(object):
